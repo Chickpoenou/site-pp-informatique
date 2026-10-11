@@ -12,7 +12,7 @@
   --bleu: #2c3fb8;
   --orange: #fdba74;          /* boutons d'action, badge panier, accents */
   --orange-fonce: #f59e4b;
-  --orange-texte: #b45309;    /* petits titres (surtitres) : contraste suffisant sur blanc */
+  --orange-texte: #b45309;    /* textes orange sur fond blanc (contraste suffisant) */
   --creme: #fffaeb;           /* texte des liens du menu */
   --texte: #0f172a;
   --texte-doux: #475569;
@@ -71,6 +71,20 @@ body {
 /* Place pour la barre panier fixe en bas (mobile), seulement quand elle est visible */
 body:has(.barre-panier:not([hidden])) {
   padding-bottom: var(--hauteur-barre-panier);
+}
+
+/* Police uniforme : les champs et boutons n'héritent pas de la police par défaut, on le force */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+/* Une seule graisse pour le gras partout (sinon "bolder" peut donner 900) */
+strong,
+b {
+  font-weight: 700;
 }
 
 img,
@@ -145,14 +159,22 @@ a {
   background: var(--fond-doux);
 }
 
-/* Petit titre en majuscules au-dessus des titres (même style que mon portfolio) */
-.surtitre {
+/* Numéro de commande affiché sur l'écran de confirmation */
+.numero-commande {
   margin: 0 0 var(--espace-1);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--orange-texte);
+  font-weight: 600;
+  color: var(--texte-doux);
+}
+
+/* Catégorie d'un produit : pastille dans la teinte du rayon (classe teinte-xxx ajoutée par app.js) */
+.pastille-categorie {
+  align-self: flex-start;
+  display: inline-block;
+  margin: 0 0 var(--espace-1);
+  padding: 2px 10px;
+  border-radius: var(--rayon-pilule);
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .entete-section {
@@ -488,7 +510,7 @@ a {
 }
 
 .pied p {
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .pied a {
@@ -507,7 +529,7 @@ a {
   display: inline-flex;
   align-items: center;
   min-height: var(--hauteur-tactile);
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .pied-bas {
@@ -519,7 +541,7 @@ a {
   padding-top: var(--espace-2);
   border-top: 1px solid rgba(255, 250, 235, 0.25);
   font-size: 0.85rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 .pied-bas p {
   margin: 0;
@@ -537,9 +559,9 @@ a {
 .hero h1 {
   font-size: 1.9rem;
 }
-.hero-texte > p:not(.surtitre) {
+.hero-texte > p {
   font-size: 1.05rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--texte-doux);
   max-width: 560px;
   margin-bottom: var(--espace-3);
@@ -678,37 +700,40 @@ a {
   color: var(--orange-texte);
 }
 
-/* Étapes "Comment commander" */
+/* Étapes "Comment commander" (générées par app.js) */
 .etapes {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--espace-2);
-  counter-reset: etape;
+  grid-template-columns: 1fr;          /* mobile : une étape sous l'autre */
+  gap: var(--espace-3);
 }
-.etapes li {
-  position: relative;
-  padding: var(--espace-3) var(--espace-2) var(--espace-2);
-  border-top: 3px solid var(--orange);
-  background: var(--fond);
-  border-radius: 0 0 var(--rayon) var(--rayon);
-  counter-increment: etape;
+.etape {
+  padding-top: var(--espace-2);
+  border-top: 2px solid var(--orange-fonce);   /* fine ligne orange au-dessus de chaque étape */
 }
-.etapes li::before {
-  content: "0" counter(etape);
+.etape-numero {
   display: block;
-  margin-bottom: 4px;
-  font-size: 1.6rem;
+  margin-bottom: var(--espace-1);
+  font-size: 2rem;
   font-weight: 700;
+  line-height: 1;
   color: var(--bleu-fonce);
 }
-.etapes strong {
-  display: block;
+.etape-titre {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  font-weight: 700;
 }
-.etapes span {
+.etape-description {
+  margin: 0;
   font-size: 0.9rem;
   color: var(--texte-doux);
+}
+
+#titre-etapes {
+  font-weight: 700;
 }
 
 /* Bandeau d'appel à l'action */
@@ -726,7 +751,7 @@ a {
 }
 .bandeau-cta p {
   margin: 0;
-  font-weight: 300;
+  font-weight: 400;
 }
 .bandeau-cta .bouton {
   background: var(--orange);
@@ -744,10 +769,10 @@ a {
 .page-intro h1 {
   margin-bottom: var(--espace-1);
 }
-.page-intro p:not(.surtitre) {
+.page-intro p {
   max-width: 640px;
   margin: 0;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--texte-doux);
 }
 
@@ -1297,33 +1322,197 @@ fieldset.champ {
    ========================================================== */
 .mise-en-page-contact {
   display: grid;
-  gap: var(--espace-4);
-  padding-bottom: var(--espace-4);
+  gap: var(--espace-3);
+  align-items: start;
 }
 
-.coordonnees {
-  margin: 0;
-  border-top: 3px solid var(--orange);
+/* Les deux blocs (formulaire et boutique) sont des cartes */
+.carte-contact {
+  padding: var(--espace-3) var(--espace-2);
+  border: 1px solid var(--bordure);
+  border-radius: 16px;
+  background: var(--fond);
 }
-.coordonnees div {
-  padding: var(--espace-2) 0;
-  border-bottom: 1px solid var(--bordure);
+.carte-contact h2 {
+  margin-bottom: var(--espace-2);
+  font-size: 1.25rem;
 }
-.coordonnees dt {
-  margin-bottom: 2px;
-  font-size: 0.8rem;
-  color: var(--texte-doux);
+
+/* A. Objets de demande : boutons radio présentés comme des puces */
+.objets-demande {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espace-1);
 }
-.coordonnees dd {
-  margin: 0;
-  font-weight: 600;
-  overflow-wrap: anywhere;
+.objet-demande {
+  position: relative;
+  cursor: pointer;
 }
-.coordonnees a {
+.objet-demande input {
+  position: absolute;      /* le rond radio est caché, la puce entière est cliquable */
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.objet-demande span {
   display: inline-flex;
   align-items: center;
   min-height: var(--hauteur-tactile);
+  padding: 0 var(--espace-2);
+  border: 1px solid var(--bordure-forte);
+  border-radius: var(--rayon-pilule);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+.objet-demande:hover span {
+  border-color: var(--bleu-fonce);
+}
+.objet-demande input:checked + span {
+  background: var(--bleu-fonce);
+  border-color: var(--bleu-fonce);
+  color: var(--orange);
+}
+.objet-demande input:focus-visible + span {
+  outline: 3px solid var(--orange-fonce);
+  outline-offset: 2px;
+}
+#commande-facultatif {
+  font-weight: 400;
+  color: var(--texte-doux);
+}
+
+/* C. La boutique */
+.boutique {
+  background: var(--fond-doux);
+}
+.statut-boutique {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 var(--espace-2);
+  padding: 4px 12px;
+  border-radius: var(--rayon-pilule);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.statut-boutique::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.statut-boutique.est-ouvert {
+  background: #e3f3e8;
+  color: var(--succes);
+}
+.statut-boutique.est-ferme {
+  background: #fdecea;
+  color: var(--erreur);
+}
+
+.horaires {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.horaires th,
+.horaires td {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--bordure);
+  text-align: left;
+}
+.horaires th {
+  font-weight: 400;
+  color: var(--texte-doux);
+}
+.horaires td {
+  text-align: right;
+}
+.horaires .aujourdhui th,
+.horaires .aujourdhui td {
+  font-weight: 700;
+  color: var(--bleu-fonce);
+}
+.boutique .note {
+  margin: 6px 0 var(--espace-2);
+}
+
+.boutique-adresse p {
+  margin-bottom: var(--espace-1);
+  font-size: 0.9rem;
+}
+
+.canaux {
+  list-style: none;
+  margin: var(--espace-2) 0 0;
+  padding: 0;
+}
+.canaux a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espace-1);
+  min-height: var(--hauteur-tactile);
+  border-bottom: 1px solid var(--bordure);
   color: var(--texte);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.canaux a:hover strong {
+  text-decoration: underline;
+}
+.canaux span {
+  color: var(--texte-doux);
+}
+.canaux strong {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+/* B. Questions fréquentes */
+.section-faq {
+  padding: var(--espace-4) 0;
+}
+.faq {
+  display: grid;
+  gap: var(--espace-1);
+}
+.question {
+  border: 1px solid var(--bordure);
+  border-radius: 12px;
+  background: var(--fond);
+}
+.question summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espace-2);
+  min-height: var(--hauteur-tactile);
+  padding: 10px var(--espace-2);
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;          /* retire le triangle par défaut */
+}
+.question summary::-webkit-details-marker {
+  display: none;
+}
+.question summary::after {
+  content: "+";
+  flex: none;
+  font-size: 1.3rem;
+  color: var(--orange-fonce);
+  transition: transform 0.2s;
+}
+.question[open] summary::after {
+  transform: rotate(45deg);  /* le + devient une croix */
+}
+.question p {
+  margin: 0;
+  padding: 0 var(--espace-2) var(--espace-2);
+  color: var(--texte-doux);
 }
 
 /* ==========================================================
@@ -1443,7 +1632,14 @@ fieldset.champ {
   }
 
   .mise-en-page-contact {
-    grid-template-columns: 0.8fr 1.2fr;
+    grid-template-columns: 1.3fr 1fr;
+  }
+  .carte-contact {
+    padding: var(--espace-3);
+  }
+  .faq {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
   }
 }
 
@@ -1459,7 +1655,6 @@ fieldset.champ {
     padding-bottom: var(--espace-5);
   }
   .hero h1 { font-size: 3.2rem; }
-  .hero-visuel { min-height: 380px; }
 
   .menu a { padding: 0 var(--espace-3); font-size: 1.05rem; }
 
@@ -1470,7 +1665,6 @@ fieldset.champ {
     align-items: flex-start;
     padding: var(--espace-3);
   }
-  .etapes { grid-template-columns: repeat(4, 1fr); }
 
   .filtres {
     grid-template-columns: 1fr;
@@ -1516,11 +1710,189 @@ fieldset.champ {
   transform: scale(1.04);
 }
 
-.credit-photo {
-  margin: var(--espace-1) 0 0;
-  font-size: 0.75rem;
-  color: var(--texte-doux);
+/* Photo du bloc d'accueil : elle remplit tout le cadre, les étiquettes de prix restent par-dessus */
+.hero-figure {
+  margin: 0;
 }
-.credit-photo a {
-  color: inherit;
+.hero-visuel img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Tablette et ordinateur : texte à gauche, photo à droite (la photo ne prend plus toute la largeur) */
+@media (min-width: 768px) {
+  .hero {
+    grid-template-columns: 1.2fr 0.8fr;
+    align-items: center;
+    gap: var(--espace-4);
+  }
+  .hero-visuel { min-height: 260px; }
+}
+@media (min-width: 1280px) {
+  .hero-visuel { min-height: 340px; }
+}
+
+/* ==========================================================
+   ACCUEIL : tuiles des rayons avec photo
+   ========================================================== */
+.grille-categories {
+  grid-template-columns: repeat(2, 1fr);   /* 2 tuiles par ligne dès 360 px */
+  gap: 12px;
+}
+.tuile-rayon {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  color: #fff;
+  text-decoration: none;
+  isolation: isolate;
+}
+.tuile-rayon-photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  display: grid;
+  place-items: center;
+}
+.tuile-rayon-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+.tuile-rayon-photo svg {
+  width: 40%;
+}
+/* Dégradé bleu nuit en bas : le texte blanc reste lisible quelle que soit la photo */
+.tuile-rayon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgba(25, 25, 112, 0.95) 0%, rgba(25, 25, 112, 0.55) 45%, rgba(25, 25, 112, 0) 75%);
+}
+.tuile-rayon:hover .tuile-rayon-photo img {
+  transform: scale(1.06);
+}
+.tuile-rayon-texte {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+}
+.tuile-rayon-nom {
+  font-size: 0.95rem;
+  line-height: 1.25;
+}
+.tuile-rayon-accroche {
+  display: none;               /* trop long pour les petites tuiles mobiles */
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+.tuile-rayon-pied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--orange);
+}
+.tuile-rayon-fleche {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--bleu-fonce);
+  font-size: 0.9rem;
+  transition: transform 0.2s;
+}
+.tuile-rayon:hover .tuile-rayon-fleche {
+  transform: translateX(3px);
+}
+
+@media (min-width: 768px) {
+  .grille-categories {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--espace-2);
+  }
+  .tuile-rayon {
+    min-height: 300px;
+  }
+  .tuile-rayon-texte {
+    padding: var(--espace-2);
+  }
+  .tuile-rayon-nom {
+    font-size: 1.05rem;
+  }
+  .tuile-rayon-pied {
+    font-size: 0.8rem;
+  }
+}
+@media (min-width: 1280px) {
+  .tuile-rayon {
+    min-height: 360px;
+  }
+  .tuile-rayon-accroche {
+    display: block;
+  }
+}
+
+/* ==========================================================
+   EN-TÊTE : menu aligné à droite, à côté du panier (tablette et ordinateur)
+   ========================================================== */
+@media (min-width: 768px) {
+  .menu {
+    order: 1;
+    margin-left: auto;
+  }
+  .separateur {
+    order: 2;              /* le trait sépare maintenant le menu du panier */
+  }
+  .entete-actions {
+    order: 3;
+    margin-left: 0;
+  }
+}
+
+/* Étapes "Comment commander" : 4 colonnes dès 1024 px (ordinateurs portables courants) */
+@media (min-width: 1024px) {
+  .etapes {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ==========================================================
+   TRÈS PETITS ÉCRANS (moins de 360 px) : l'en-tête doit tenir sans cacher le burger
+   ========================================================== */
+.entete-actions {
+  flex: none;                /* le panier et le burger ne rétrécissent jamais */
+}
+.logo {
+  min-width: 0;              /* c'est le logo qui cède la place s'il manque de largeur */
+}
+@media (max-width: 380px) {
+  .entete {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  .entete-barre {
+    gap: 8px;
+    padding-left: 16px;
+  }
+  .logo-pp { font-size: 1.4rem; }
+  .logo-nom { font-size: 0.9rem; }
+}
+@media (max-width: 330px) {
+  .logo-nom {
+    display: none;           /* on garde seulement "PP" : le lien reste nommé grâce à aria-label */
+  }
 }

@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
   <a class="lien-evitement" href="#contenu">Aller au contenu</a>
@@ -48,7 +48,6 @@
     <!-- HERO -->
     <section class="conteneur hero" aria-labelledby="titre-hero">
       <div class="hero-texte">
-        <p class="surtitre">Matériel informatique · Cotonou</p>
         <h1 id="titre-hero">Votre matériel informatique, au prix affiché.</h1>
         <p>Portables, unités centrales, écrans, imprimantes, antivirus et accessoires. Choisissez en ligne, commandez en un message WhatsApp et payez seulement à la réception.</p>
         <div class="groupe-boutons">
@@ -56,11 +55,14 @@
           <a class="bouton bouton-secondaire" href="#comment-commander">Comment commander ?</a>
         </div>
       </div>
-      <div class="hero-visuel motif" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/><path d="M10 8.5h4"/></svg>
-        <span class="etiquette-prix etiquette-1">Portables dès <strong>215 000 FCFA</strong></span>
-        <span class="etiquette-prix etiquette-2">Souris dès <strong>4 500 FCFA</strong></span>
-      </div>
+      <figure class="hero-figure">
+        <div class="hero-visuel">
+          <img src="https://images.unsplash.com/photo-1649030616983-845d870570d7?w=900&h=700&fit=crop&auto=format&q=75"
+               alt="Un client essaie des ordinateurs portables exposés en boutique" width="900" height="700">
+          <span class="etiquette-prix etiquette-1">Portables dès <strong>215 000 FCFA</strong></span>
+          <span class="etiquette-prix etiquette-2">Souris dès <strong>4 500 FCFA</strong></span>
+        </div>
+      </figure>
     </section>
 
     <!-- ARGUMENTS DE CONFIANCE : répondent à la crainte d'acheter en ligne -->
@@ -84,9 +86,9 @@
       <div class="conteneur">
         <div class="entete-section">
           <div>
-            <p class="surtitre">Nos rayons</p>
-            <h2 id="titre-categories">Que cherchez-vous ?</h2>
+            <h2 id="titre-categories">Nos rayons</h2>
           </div>
+          <p>Prix de départ en FCFA, tels qu'en boutique.</p>
         </div>
         <div class="grille-categories" id="grille-categories"></div>
       </div>
@@ -97,7 +99,6 @@
       <div class="conteneur">
         <div class="entete-section">
           <div>
-            <p class="surtitre">Sélection</p>
             <h2 id="titre-phares">Les plus demandés</h2>
           </div>
           <a class="lien-retour" href="catalogue.html">Tout le catalogue →</a>
@@ -111,16 +112,11 @@
       <div class="conteneur">
         <div class="entete-section">
           <div>
-            <p class="surtitre">Simple et sans risque</p>
             <h2 id="titre-etapes">Comment commander ?</h2>
           </div>
         </div>
-        <ol class="etapes">
-          <li><strong>Choisissez</strong><span>Parcourez le catalogue et filtrez par catégorie ou par prix.</span></li>
-          <li><strong>Ajoutez au panier</strong><span>Ajustez les quantités : le total en FCFA se calcule tout seul.</span></li>
-          <li><strong>Envoyez la commande</strong><span>Indiquez vos coordonnées : la commande part en un message WhatsApp.</span></li>
-          <li><strong>Payez à la réception</strong><span>En boutique ou à la livraison, par Mobile Money ou en espèces.</span></li>
-        </ol>
+        <!-- ÉTAPES : remplies par app.js à partir du tableau ETAPES_COMMANDE (produits.js) -->
+        <ol class="etapes" id="etapes-commande"></ol>
       </div>
     </section>
 
@@ -185,15 +181,15 @@
         </div>
       </div>
       <div class="pied-bas">
-        <p>&copy; <span class="annee">2026</span> PP Informatique. Photos : <a href="https://unsplash.com/license" target="_blank" rel="noopener">Unsplash</a> (auteurs cités sur chaque fiche produit).</p>
-        <p>Site réalisé par <a href="https://github.com/Chickpoenou" target="_blank" rel="noopener">Chickpoenou</a> · projet MIDEESSI Learn</p>
+        <p>&copy; <span class="annee">2026</span> PP Informatique.</p>
+        <p>Site réalisé par <a href="https://chick-poenou.onrender.com/" target="_blank" rel="noopener">Chickpoenou</a> · projet MIDEESSI Learn</p>
       </div>
     </div>
   </footer>
 
   <!-- Ordre important : les données, puis le panier, puis le code des pages -->
-  <script src="js/produits.js"></script>
-  <script src="js/panier.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/produits.js?v=11"></script>
+  <script src="js/panier.js?v=11"></script>
+  <script src="js/app.js?v=11"></script>
 </body>
 </html>

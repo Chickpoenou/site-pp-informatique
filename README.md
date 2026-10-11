@@ -27,4 +27,26 @@ Site statique HTML / CSS / JavaScript, sans framework ni serveur.
 ## À compléter
 - Remplacer le logo texte « PP Informatique » par le vrai logo du client (fichier dans `images/`).
 - Adresse et horaires de la boutique (page contact).
-- Photos : si vous ajoutez des photos Unsplash ou Pexels, renseignez `image` dans `produits.js` et citez la source dans le pied de page.
+
+## Sources des images
+Photos libres de droits issues d'Unsplash (licence : https://unsplash.com/license, usage commercial autorisé,
+crédit non obligatoire). Elles ne sont pas créditées sur le site ; les sources sont listées ici.
+Ce sont des photos d'illustration, pas les produits réels de la boutique.
+
+| Produit | Nom | Photographe | Page de la photo |
+|---|---|---|---|
+| 1 | Portable bureautique 15,6" - 8 Go / 256 Go SSD | Erick Cerritos | https://unsplash.com/photos/ordinateur-portable-dell-sur-surface-blanche-i5UV2HpITYA |
+| 2 | Portable 14" - 8 Go / 512 Go SSD | Dell | https://unsplash.com/photos/ordinateur-portable-sur-table-blanche-Gi3iUJ1FwxI |
+| 3 | Portable 15,6" - 16 Go / 512 Go SSD | Ricardo Resende | https://unsplash.com/photos/un-ordinateur-portable-pose-sur-un-bureau-en-bois-bf2ZA4oB8-M |
+| 4 | Unité centrale de bureau - 8 Go / 500 Go SSD | Anthony Roberts | https://unsplash.com/photos/une-tour-dordinateur-avec-un-ecran-noir-fMbiAi0rbkA |
+| 5 | Écran 22" Full HD | Ryan Yao | https://unsplash.com/photos/black-flat-screen-computer-monitor-keyboard-speakers-mouse-on-desk-BDvCewlnbD8 |
+| 6 | Écran 24" Full HD IPS | Sebastian Bednarek | https://unsplash.com/photos/espace-de-travail-informatique-avec-clavier-et-manettes-x2Z0uNj-Quo |
+| 7 | Imprimante jet d'encre multifonction | FilterGrade | https://unsplash.com/photos/imprimante-canon-noire-sur-table-en-bois-marron-oPyAcpkQch0 |
+| 8 | Imprimante laser monochrome | Mahrous Houses | https://unsplash.com/photos/imprimante-hp-tout-en-un-blanc-et-gris-5AoOejjRUrA |
+| 9 | Antivirus - licence 1 poste, 1 an | FlyD | https://unsplash.com/photos/cadenas-rouge-sur-clavier-dordinateur-noir-mT7lXZPjk7U |
+| 10 | Antivirus - licence 3 postes, 1 an | Dan Nelson | https://unsplash.com/photos/personne-utilisant-macbook-pro-sur-une-table-blanche-AvSFPw5Tp68 |
+| 11 | Souris sans fil | JL Cabrera | https://unsplash.com/photos/une-souris-dordinateur-noire-Q-jxVqz0wVQ |
+| 12 | Clavier AZERTY USB | Clay Banks | https://unsplash.com/photos/clavier-dordinateur-argent-et-blanc-PXaQXThG1FY |
+| 13 | Chargeur universel pour portable 90 W | Auguras Pipiras | https://unsplash.com/photos/macbook-apple-blanc-sur-surface-noire-4xnucLdUPtA |
+| 14 | Sac à dos pour portable 15,6" | Cyberbackpack.com | https://unsplash.com/photos/un-boitier-dordinateur-noir-B_BVXEQsGog |
+| Accueil | Photo principale | Jass Hernandez | https://unsplash.com/photos/un-homme-utilise-un-ordinateur-portable-sur-une-table-IxbNrHCYXm0 |

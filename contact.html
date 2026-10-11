@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
   <a class="lien-evitement" href="#contenu">Aller au contenu</a>
@@ -47,39 +47,80 @@
   <main id="contenu">
     <div class="conteneur">
       <div class="page-intro">
-        <p class="surtitre">Contact</p>
         <h1>Parlons de votre besoin</h1>
-        <p>Une question sur un produit, une disponibilité ou une commande pour votre entreprise ? Écrivez-nous.</p>
+        <p>Choisissez l'objet de votre demande : votre message arrive déjà trié sur notre WhatsApp, et nous répondons plus vite.</p>
       </div>
 
       <div class="mise-en-page-contact">
-        <dl class="coordonnees">
-          <div><dt>WhatsApp et téléphone</dt><dd><a href="https://wa.me/2290199002393" target="_blank" rel="noopener">+229 01 99 00 23 93</a></dd></div>
-          <div><dt>E-mail</dt><dd><a href="mailto:chickpoenou@gmail.com">chickpoenou@gmail.com</a></dd></div>
-          <div><dt>Facebook</dt><dd><a href="https://www.facebook.com/nettanel-poenou" target="_blank" rel="noopener">facebook.com/nettanel-poenou</a></dd></div>
-          <div><dt>Boutique</dt><dd>Cotonou, Bénin (adresse précise à confirmer avec le client)</dd></div>
-          <div><dt>Horaires</dt><dd>Du lundi au samedi (horaires à confirmer avec le client)</dd></div>
-        </dl>
-
-        <form class="formulaire" id="formulaire-contact" novalidate>
+        <!-- A. FORMULAIRE PAR OBJET DE DEMANDE -->
+        <form class="formulaire carte-contact" id="formulaire-contact" novalidate>
           <h2>Envoyer un message</h2>
+
+          <fieldset class="champ">
+            <legend>Votre demande concerne</legend>
+            <!-- Puces remplies par app.js à partir de MOTIFS_CONTACT (produits.js) -->
+            <div class="objets-demande" id="motifs-contact"></div>
+          </fieldset>
+
           <div class="champ">
             <label for="contact-nom">Votre nom</label>
             <input id="contact-nom" name="contact-nom" type="text" autocomplete="name" required aria-describedby="erreur-contact-nom">
             <p class="erreur-champ" id="erreur-contact-nom" hidden></p>
           </div>
+
+          <!-- Visible seulement pour « Suivi de commande » et « Garantie et SAV » -->
+          <div class="champ" id="champ-commande" hidden>
+            <label for="contact-commande">Numéro de commande <span id="commande-facultatif">(facultatif)</span></label>
+            <input id="contact-commande" name="contact-commande" type="text" placeholder="PP-20261011-1432"
+                   autocomplete="off" aria-describedby="erreur-contact-commande">
+            <p class="erreur-champ" id="erreur-contact-commande" hidden></p>
+          </div>
+
           <div class="champ">
             <label for="contact-message">Votre message</label>
-            <textarea id="contact-message" name="contact-message" rows="6" required aria-describedby="erreur-contact-message"
-                      placeholder="Ex. : je cherche un portable pour un étudiant, budget 250 000 FCFA."></textarea>
+            <textarea id="contact-message" name="contact-message" rows="5" required aria-describedby="erreur-contact-message"></textarea>
             <p class="erreur-champ" id="erreur-contact-message" hidden></p>
           </div>
+
           <div class="groupe-boutons">
             <button type="submit" class="bouton bouton-whatsapp">Envoyer sur WhatsApp</button>
             <a class="bouton bouton-secondaire" href="mailto:chickpoenou@gmail.com">Écrire un e-mail</a>
           </div>
         </form>
+
+        <!-- C. LA BOUTIQUE : statut, horaires, adresse, autres moyens de contact -->
+        <aside class="carte-contact boutique" aria-labelledby="titre-boutique">
+          <h2 id="titre-boutique">La boutique</h2>
+          <!-- Statut calculé par app.js à l'heure du Bénin -->
+          <p class="statut-boutique" id="statut-boutique" aria-live="polite"></p>
+
+          <table class="horaires">
+            <caption class="visuellement-cache">Horaires d'ouverture</caption>
+            <tbody id="horaires-boutique"></tbody>
+          </table>
+          <p class="note">Horaires indicatifs, à confirmer.</p>
+
+          <div class="boutique-adresse">
+            <p><strong>Cotonou, Bénin</strong><br>Adresse précise à confirmer avec le client</p>
+            <!-- À remplacer par un plan centré sur la boutique quand l'adresse sera connue -->
+            <a class="bouton bouton-secondaire bouton-petit" href="https://www.openstreetmap.org/search?query=Cotonou%2C%20B%C3%A9nin"
+               target="_blank" rel="noopener">Voir sur la carte</a>
+          </div>
+
+          <ul class="canaux">
+            <li><a href="https://wa.me/2290199002393" target="_blank" rel="noopener"><span>WhatsApp</span><strong>+229 01 99 00 23 93</strong></a></li>
+            <li><a href="tel:+2290199002393"><span>Appeler</span><strong>+229 01 99 00 23 93</strong></a></li>
+            <li><a href="mailto:chickpoenou@gmail.com"><span>E-mail</span><strong>chickpoenou@gmail.com</strong></a></li>
+            <li><a href="https://www.facebook.com/nettanel-poenou" target="_blank" rel="noopener"><span>Facebook</span><strong>nettanel-poenou</strong></a></li>
+          </ul>
+        </aside>
       </div>
+
+      <!-- B. QUESTIONS FRÉQUENTES : remplies par app.js à partir de QUESTIONS_FREQUENTES -->
+      <section class="section-faq" aria-labelledby="titre-faq">
+        <h2 id="titre-faq">Questions fréquentes</h2>
+        <div class="faq" id="faq"></div>
+      </section>
     </div>
   </main>
 
@@ -119,15 +160,15 @@
         </div>
       </div>
       <div class="pied-bas">
-        <p>&copy; <span class="annee">2026</span> PP Informatique. Photos : <a href="https://unsplash.com/license" target="_blank" rel="noopener">Unsplash</a> (auteurs cités sur chaque fiche produit).</p>
-        <p>Site réalisé par <a href="https://github.com/Chickpoenou" target="_blank" rel="noopener">Chickpoenou</a> · projet MIDEESSI Learn</p>
+        <p>&copy; <span class="annee">2026</span> PP Informatique.</p>
+        <p>Site réalisé par <a href="https://chick-poenou.onrender.com/" target="_blank" rel="noopener">Chickpoenou</a> · projet MIDEESSI Learn</p>
       </div>
     </div>
   </footer>
 
   <!-- Ordre important : les données, puis le panier, puis le code des pages -->
-  <script src="js/produits.js"></script>
-  <script src="js/panier.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/produits.js?v=11"></script>
+  <script src="js/panier.js?v=11"></script>
+  <script src="js/app.js?v=11"></script>
 </body>
 </html>

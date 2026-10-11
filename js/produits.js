@@ -3,15 +3,16 @@
 // sur le marché béninois (boutiques de Cotonou, annonces en ligne).
 // Le même catalogue doit apparaître dans la maquette Canva et dans le devis.
 
-// Les 4 catégories du site
+// Les 4 catégories du site.
+// "photo" : identifiant du produit dont la photo illustre le rayon sur la page d'accueil.
 const CATEGORIES = [
-  { id: "portables",    nom: "Ordinateurs portables",       visuel: "portable",
+  { id: "portables",    nom: "Ordinateurs portables",       visuel: "portable",   photo: 1,
     accroche: "Pour les études, le bureau et le télétravail." },
-  { id: "postes-fixes", nom: "Unités centrales et écrans",  visuel: "ecran",
-    accroche: "Postes de travail fixes pour la maison ou le commerce." },
-  { id: "imprimantes",  nom: "Imprimantes et logiciels",    visuel: "imprimante",
-    accroche: "Imprimer, numériser et protéger vos ordinateurs." },
-  { id: "accessoires",  nom: "Accessoires",                 visuel: "souris",
+  { id: "postes-fixes", nom: "Unités centrales et écrans",  visuel: "ecran",      photo: 6,
+    accroche: "Postes fixes pour la maison ou le commerce." },
+  { id: "imprimantes",  nom: "Imprimantes et logiciels",    visuel: "imprimante", photo: 8,
+    accroche: "Imprimer, numériser, protéger vos PC." },
+  { id: "accessoires",  nom: "Accessoires",                 visuel: "souris",     photo: 11,
     accroche: "Souris, claviers, chargeurs et sacs." }
 ];
 
@@ -29,7 +30,7 @@ const FOURCHETTES_PRIX = [
 // "image"  : photo libre de droits (licence Unsplash : usage commercial autorisé, sans obligation de crédit).
 //            Elle est chargée depuis le serveur d'Unsplash ; w=800&h=600&fit=crop la recadre en 4:3.
 //            Si l'image ne se charge pas, l'illustration SVG "visuel" est affichée à la place.
-// "credit" : auteur et page de la photo, affichés sous la photo sur la fiche produit (par respect de l'auteur).
+// "credit" : auteur et page de la photo. Non affiché sur le site : sert de justificatif de la source.
 // "phare"  : true = produit mis en avant sur la page d'accueil.
 const PRODUITS = [
   { id: 1,  nom: "Portable bureautique 15,6\" - 8 Go / 256 Go SSD", categorie: "portables",
@@ -92,3 +93,63 @@ const PRODUITS = [
     credit: { auteur: "Cyberbackpack.com", lien: "https://unsplash.com/photos/un-boitier-dordinateur-noir-B_BVXEQsGog" }, phare: false,
     description: "Sac à dos avec compartiment matelassé pour portable jusqu'à 15,6 pouces." }
 ];
+
+// Les étapes du parcours d'achat, affichées dans "Comment commander ?" sur l'accueil.
+// Même forme qu'une réponse d'API (tableau d'objets) : on pourrait plus tard la charger
+// avec fetch("api/etapes.json") au lieu de l'écrire ici, sans changer le code d'affichage.
+const ETAPES_COMMANDE = [
+  { numero: "01", titre: "Choisissez",
+    description: "Parcourez le catalogue et filtrez par catégorie ou par prix." },
+  { numero: "02", titre: "Ajoutez au panier",
+    description: "Ajustez les quantités : le total en FCFA se calcule tout seul." },
+  { numero: "03", titre: "Envoyez la commande",
+    description: "Indiquez vos coordonnées : la commande part en un message WhatsApp." },
+  { numero: "04", titre: "Payez à la réception",
+    description: "En boutique ou à la livraison, par Mobile Money ou en espèces." }
+];
+
+// ---------- Page contact ----------
+
+// Objets de demande : le client en choisit un, le formulaire s'adapte.
+// "commande" : "obligatoire", "facultatif" ou "" (champ numéro de commande masqué).
+const MOTIFS_CONTACT = [
+  { id: "conseil", nom: "Conseil avant achat", commande: "",
+    exemple: "Je cherche un portable pour un étudiant, budget 250 000 FCFA." },
+  { id: "suivi", nom: "Suivi de commande", commande: "obligatoire",
+    exemple: "J'ai commandé hier, quand puis-je récupérer ma commande ?" },
+  { id: "devis", nom: "Devis entreprise", commande: "",
+    exemple: "Nous équipons un bureau de 5 postes : unités centrales, écrans et une imprimante." },
+  { id: "garantie", nom: "Garantie et SAV", commande: "facultatif",
+    exemple: "Mon imprimante achetée chez vous ne s'allume plus." }
+];
+
+// Questions fréquentes : elles rassurent avant l'achat et évitent des messages.
+// Les réponses reprennent les règles du site (paiement à la réception, livraison à Cotonou).
+const QUESTIONS_FREQUENTES = [
+  { question: "Comment payer ma commande ?",
+    reponse: "À la réception, par Mobile Money (MTN, Moov) ou en espèces. Aucun paiement n'est demandé sur le site." },
+  { question: "Puis-je voir le produit avant de payer ?",
+    reponse: "Oui. Vous payez seulement après avoir vu le produit, en boutique ou au moment de la livraison." },
+  { question: "Livrez-vous à domicile ?",
+    reponse: "Oui, à Cotonou. Les frais dépendent du quartier et vous sont confirmés sur WhatsApp avant la livraison. Le retrait en boutique est gratuit." },
+  { question: "Les produits sont-ils garantis ?",
+    reponse: "Les conditions de garantie (durée, ce qui est couvert) vous sont précisées par écrit à la commande, selon le produit. Gardez votre reçu." },
+  { question: "Comment suivre ma commande ?",
+    reponse: "Après votre commande, un numéro du type PP-20261011-1432 s'affiche. Choisissez « Suivi de commande » ci-dessus et indiquez-le." }
+];
+
+// La boutique. ADRESSE ET HORAIRES À CONFIRMER AVEC LE CLIENT (valeurs indicatives).
+// jour : 0 = dimanche, 1 = lundi ... 6 = samedi (comme getDay() en JavaScript).
+const BOUTIQUE = {
+  ville: "Cotonou, Bénin",
+  adresse: "Adresse précise à confirmer avec le client",
+  horaires: [
+    { jour: 1, nom: "Lundi",    ouverture: "08:00", fermeture: "19:00" },
+    { jour: 2, nom: "Mardi",    ouverture: "08:00", fermeture: "19:00" },
+    { jour: 3, nom: "Mercredi", ouverture: "08:00", fermeture: "19:00" },
+    { jour: 4, nom: "Jeudi",    ouverture: "08:00", fermeture: "19:00" },
+    { jour: 5, nom: "Vendredi", ouverture: "08:00", fermeture: "19:00" },
+    { jour: 6, nom: "Samedi",   ouverture: "09:00", fermeture: "17:00" },
+    { jour: 0, nom: "Dimanche", ouverture: "",      fermeture: "" }
+  ]
+};

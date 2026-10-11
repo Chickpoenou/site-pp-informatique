@@ -97,17 +97,6 @@ function afficherIcone(zone, visuel) {
     + ICONES[visuel] + "</svg>";
 }
 
-// Petite ligne "Photo : Auteur / Unsplash" sous la photo de la fiche produit
-function creerCredit(produit) {
-  const credit = creerElement("p", "credit-photo", "Photo : ");
-  const lien = creerElement("a", "", produit.credit.auteur + " / Unsplash");
-  lien.href = produit.credit.lien;
-  lien.target = "_blank";
-  lien.rel = "noopener";
-  credit.appendChild(lien);
-  return credit;
-}
-
 // ---------- 4. Carte produit (accueil, catalogue, produits similaires) ----------
 
 function creerCarteProduit(produit) {
@@ -134,7 +123,7 @@ function creerCarteProduit(produit) {
     });
 
   corps.append(
-    creerElement("p", "surtitre", categorie.nom),
+    creerElement("p", "pastille-categorie teinte-" + categorie.id, categorie.nom),
     titre,
     creerElement("p", "carte-prix", formaterPrix(produit.prix)),
     boutonAjout
@@ -188,20 +177,33 @@ function ajouterEtPrevenir(produit, quantite, bouton) {
 
 // ---------- 6. Page d'accueil ----------
 
-// Tuiles des catégories (avec le nombre de produits calculé depuis PRODUITS)
+// Tuiles des rayons : grande photo, nom du rayon, nombre de produits et prix le plus bas.
+// Le nombre et le prix sont calculés depuis PRODUITS : ils restent justes si le catalogue change.
 function afficherCategoriesAccueil() {
   const grille = document.getElementById("grille-categories");
   CATEGORIES.forEach(function (categorie) {
-    const nb = PRODUITS.filter(function (p) { return p.categorie === categorie.id; }).length;
+    const produits = PRODUITS.filter(function (p) { return p.categorie === categorie.id; });
+    const prixMin = Math.min.apply(null, produits.map(function (p) { return p.prix; }));
+    const produitPhoto = trouverProduit(categorie.photo);
 
-    const tuile = creerElement("a", "tuile-categorie");
+    const tuile = creerElement("a", "tuile-rayon");
     tuile.href = "catalogue.html?categorie=" + categorie.id;
-    const visuel = creerVisuel("span", "tuile-visuel", { categorie: categorie.id, visuel: categorie.visuel });
-    const texte = creerElement("span", "tuile-texte");
+
+    // La photo est décorative ici (le nom du rayon est écrit juste dessous)
+    const visuel = creerVisuel("span", "tuile-rayon-photo", produitPhoto);
+    const img = visuel.querySelector("img");
+    if (img) img.alt = "";
+
+    const texte = creerElement("span", "tuile-rayon-texte");
+    const pied = creerElement("span", "tuile-rayon-pied");
+    pied.append(
+      creerElement("span", "", produits.length + " produits · dès " + formaterPrix(prixMin)),
+      creerElement("span", "tuile-rayon-fleche", "→")
+    );
     texte.append(
-      creerElement("strong", "", categorie.nom),
-      creerElement("span", "", categorie.accroche),
-      creerElement("span", "tuile-nombre", nb + " produits →")
+      creerElement("strong", "tuile-rayon-nom", categorie.nom),
+      creerElement("span", "tuile-rayon-accroche", categorie.accroche),
+      pied
     );
     tuile.append(visuel, texte);
     grille.appendChild(tuile);
@@ -217,6 +219,30 @@ if (document.getElementById("produits-phares")) {
   PRODUITS.filter(function (p) { return p.phare; }).forEach(function (p) {
     grillePhares.appendChild(creerCarteProduit(p));
   });
+}
+
+// ---------- 6 bis. Accueil : étapes "Comment commander ?" ----------
+// Le HTML des étapes est construit à partir du tableau ETAPES_COMMANDE (produits.js).
+// Pour changer un texte, on modifie le tableau, pas le HTML.
+
+function creerEtape(etape) {
+  const element = creerElement("li", "etape");
+  element.append(
+    creerElement("span", "etape-numero", etape.numero),
+    creerElement("h3", "etape-titre", etape.titre),
+    creerElement("p", "etape-description", etape.description)
+  );
+  return element;
+}
+
+function afficherEtapes(etapes) {
+  const liste = document.getElementById("etapes-commande");
+  liste.replaceChildren();
+  etapes.forEach(function (etape) { liste.appendChild(creerEtape(etape)); });
+}
+
+if (document.getElementById("etapes-commande")) {
+  afficherEtapes(ETAPES_COMMANDE);
 }
 
 // ---------- 7. Page catalogue : filtres, recherche et tri ----------
@@ -420,7 +446,7 @@ function afficherFicheProduit(produit) {
   });
 
   infos.append(
-    creerElement("p", "surtitre", categorie.nom),
+    creerElement("p", "pastille-categorie teinte-" + categorie.id, categorie.nom),
     titre,
     creerElement("p", "fiche-prix", formaterPrix(produit.prix)),
     creerElement("p", "fiche-description", produit.description),
@@ -428,13 +454,7 @@ function afficherFicheProduit(produit) {
     boutonAjout,
     garanties
   );
-  // Colonne de gauche : la photo, puis le nom de son auteur
-  const colonneVisuel = creerElement("div", "fiche-colonne-visuel");
-  colonneVisuel.appendChild(creerVisuel("div", "fiche-visuel", produit));
-  if (produit.image && produit.credit) {
-    colonneVisuel.appendChild(creerCredit(produit));
-  }
-  zone.append(colonneVisuel, infos);
+  zone.append(creerVisuel("div", "fiche-visuel", produit), infos);
 
   // Produits similaires : même catégorie, sans le produit affiché (3 au maximum)
   const similaires = PRODUITS.filter(function (p) {
@@ -663,7 +683,7 @@ function afficherConfirmation(message, numero) {
   const titre = creerElement("h2", "", "Dernière étape : envoyer votre commande");
   titre.tabIndex = -1;
   zone.append(
-    creerElement("p", "surtitre", "Commande " + numero),
+    creerElement("p", "numero-commande", "Commande " + numero),
     titre,
     creerElement("p", "", "Votre commande n'est transmise à la boutique qu'une fois ce message envoyé sur WhatsApp. "
       + "Un conseiller vous répond pour confirmer la disponibilité et le rendez-vous. Voici le message :"),
@@ -755,23 +775,156 @@ if (document.getElementById("formulaire-commande")) {
   mettreAJourZoneCommande();
 }
 
-// ---------- 11. Page contact : message envoyé par WhatsApp ----------
+// ---------- 11. Page contact ----------
+// Trois blocs construits à partir des données de produits.js :
+// A. formulaire par objet de demande, B. questions fréquentes, C. horaires et statut de la boutique.
+
+// --- A. Formulaire par objet de demande ---
+
+function trouverMotif(id) {
+  return MOTIFS_CONTACT.find(function (m) { return m.id === id; });
+}
+
+// Crée les puces (boutons radio) des objets de demande ; la première est cochée
+function afficherMotifs() {
+  const zone = document.getElementById("motifs-contact");
+  MOTIFS_CONTACT.forEach(function (motif, index) {
+    const etiquette = creerElement("label", "objet-demande");
+    const radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = "motif";
+    radio.value = motif.id;
+    radio.checked = index === 0;
+    etiquette.append(radio, creerElement("span", "", motif.nom));
+    zone.appendChild(etiquette);
+  });
+}
+
+// Adapte le formulaire au motif choisi : champ commande et exemple de message
+function adapterFormulaire() {
+  const motif = trouverMotif(formulaireContact.elements.motif.value);
+  document.getElementById("champ-commande").hidden = motif.commande === "";
+  document.getElementById("commande-facultatif").hidden = motif.commande !== "facultatif";
+  document.getElementById("contact-message").placeholder = "Ex. : " + motif.exemple;
+  afficherErreurChamp("contact-commande", "");
+}
 
 const formulaireContact = document.getElementById("formulaire-contact");
 if (formulaireContact) {
+  afficherMotifs();
+  adapterFormulaire();
+  formulaireContact.addEventListener("change", function (evenement) {
+    if (evenement.target.name === "motif") adapterFormulaire();
+  });
+
   formulaireContact.addEventListener("submit", function (evenement) {
     evenement.preventDefault();
+    const motif = trouverMotif(formulaireContact.elements.motif.value);
     const nom = formulaireContact.elements["contact-nom"].value.trim();
+    const commande = formulaireContact.elements["contact-commande"].value.trim();
     const texte = formulaireContact.elements["contact-message"].value.trim();
 
-    afficherErreurChamp("contact-nom", nom.length < 2 ? "Indiquez votre nom." : "");
-    afficherErreurChamp("contact-message", texte.length < 5 ? "Écrivez votre question." : "");
-    if (nom.length < 2) { document.getElementById("contact-nom").focus(); return; }
-    if (texte.length < 5) { document.getElementById("contact-message").focus(); return; }
+    const erreurs = {
+      "contact-nom": nom.length < 2 ? "Indiquez votre nom." : "",
+      "contact-commande": motif.commande === "obligatoire" && commande.length < 4
+        ? "Indiquez votre numéro de commande (affiché après votre commande)." : "",
+      "contact-message": texte.length < 5 ? "Écrivez votre message." : ""
+    };
+    Object.keys(erreurs).forEach(function (champ) { afficherErreurChamp(champ, erreurs[champ]); });
 
-    const message = "Bonjour PP Informatique, je suis " + nom + ".\n\n" + texte;
-    window.open(construireLienWhatsApp(message), "_blank", "noopener");
+    // Le focus va sur le premier champ à corriger
+    const premier = Object.keys(erreurs).find(function (champ) { return erreurs[champ]; });
+    if (premier) {
+      document.getElementById(premier).focus();
+      return;
+    }
+
+    // Le message arrive "trié" : l'objet et le numéro de commande sont en tête
+    const lignes = ["Bonjour PP Informatique, je suis " + nom + ".", "Objet : " + motif.nom];
+    if (motif.commande !== "" && commande) lignes.push("Commande : " + commande);
+    lignes.push("", texte);
+    window.open(construireLienWhatsApp(lignes.join("\n")), "_blank", "noopener");
   });
+}
+
+// --- B. Questions fréquentes (balises <details> : s'ouvrent au clic, sans JavaScript) ---
+
+if (document.getElementById("faq")) {
+  const zoneFaq = document.getElementById("faq");
+  QUESTIONS_FREQUENTES.forEach(function (item) {
+    const bloc = creerElement("details", "question");
+    bloc.append(creerElement("summary", "", item.question), creerElement("p", "", item.reponse));
+    zoneFaq.appendChild(bloc);
+  });
+}
+
+// --- C. Horaires et statut "Ouvert / Fermé" ---
+
+// Heure actuelle au Bénin (UTC+1 toute l'année, pas d'heure d'été)
+function maintenantAuBenin() {
+  const d = new Date(Date.now() + 60 * 60 * 1000);
+  return { jour: d.getUTCDay(), minutes: d.getUTCHours() * 60 + d.getUTCMinutes() };
+}
+
+// "08:30" devient 510 (minutes depuis minuit) : plus simple à comparer
+function enMinutes(heure) {
+  const morceaux = heure.split(":");
+  return Number(morceaux[0]) * 60 + Number(morceaux[1]);
+}
+
+// "08:00" devient "8 h", "17:30" devient "17 h 30"
+function formaterHeure(heure) {
+  const morceaux = heure.split(":");
+  return Number(morceaux[0]) + " h" + (morceaux[1] === "00" ? "" : " " + morceaux[1]);
+}
+
+// Prochain jour d'ouverture après aujourd'hui (pour "Fermé · ouvre lundi à 8 h")
+function prochaineOuverture(jourActuel) {
+  for (let i = 1; i <= 7; i++) {
+    const h = BOUTIQUE.horaires.find(function (x) { return x.jour === (jourActuel + i) % 7; });
+    if (h.ouverture) return (i === 1 ? "demain" : h.nom.toLowerCase()) + " à " + formaterHeure(h.ouverture);
+  }
+  return "";
+}
+
+function afficherHoraires() {
+  const maintenant = maintenantAuBenin();
+  const aujourdhui = BOUTIQUE.horaires.find(function (h) { return h.jour === maintenant.jour; });
+
+  // Tableau des horaires, la ligne du jour est mise en avant
+  const corps = document.getElementById("horaires-boutique");
+  corps.replaceChildren();
+  BOUTIQUE.horaires.forEach(function (h) {
+    const ligne = creerElement("tr", h.jour === maintenant.jour ? "aujourdhui" : "");
+    ligne.append(
+      creerElement("th", "", h.nom),
+      creerElement("td", "", h.ouverture ? formaterHeure(h.ouverture) + " – " + formaterHeure(h.fermeture) : "Fermé")
+    );
+    ligne.firstChild.scope = "row";
+    corps.appendChild(ligne);
+  });
+
+  // Statut en direct
+  const statut = document.getElementById("statut-boutique");
+  const ouvert = aujourdhui.ouverture !== ""
+    && maintenant.minutes >= enMinutes(aujourdhui.ouverture)
+    && maintenant.minutes < enMinutes(aujourdhui.fermeture);
+
+  if (ouvert) {
+    statut.className = "statut-boutique est-ouvert";
+    statut.textContent = "Ouvert maintenant · ferme à " + formaterHeure(aujourdhui.fermeture);
+  } else if (aujourdhui.ouverture && maintenant.minutes < enMinutes(aujourdhui.ouverture)) {
+    statut.className = "statut-boutique est-ferme";
+    statut.textContent = "Fermé · ouvre aujourd'hui à " + formaterHeure(aujourdhui.ouverture);
+  } else {
+    statut.className = "statut-boutique est-ferme";
+    statut.textContent = "Fermé · ouvre " + prochaineOuverture(maintenant.jour);
+  }
+}
+
+if (document.getElementById("statut-boutique")) {
+  afficherHoraires();
+  setInterval(afficherHoraires, 60000);   // remis à jour chaque minute
 }
 
 // ---------- 12. Au chargement de chaque page ----------
