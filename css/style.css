@@ -1,0 +1,1526 @@
+/* ==========================================================
+   PP Informatique - feuille de style principale
+   Approche MOBILE FIRST : le style de base vise 360 px,
+   puis on enrichit à 768 px (tablette) et 1280 px (ordinateur).
+   ========================================================== */
+
+/* ---------- 1. VARIABLES (les couleurs se changent ICI seulement) ---------- */
+:root {
+  /* Couleurs inspirées du logo : bleu nuit (confiance) + orange (action) */
+  --bleu-fonce: #191970;
+  --bleu-fonce-2: #12124f;
+  --bleu: #2c3fb8;
+  --orange: #fdba74;          /* boutons d'action, badge panier, accents */
+  --orange-fonce: #f59e4b;
+  --orange-texte: #b45309;    /* petits titres (surtitres) : contraste suffisant sur blanc */
+  --creme: #fffaeb;           /* texte des liens du menu */
+  --texte: #0f172a;
+  --texte-doux: #475569;
+  --fond: #ffffff;
+  --fond-doux: #f9f8f4;
+  --bordure: #e2e2df;
+  --bordure-forte: #cbd5e1;
+  --erreur: #b3261e;
+  --succes: #166534;
+  --whatsapp: #1f8f4e;
+
+  /* Teintes des visuels, une par catégorie */
+  --teinte-portables: #e8edf4;    --trait-portables: #1e3a5f;
+  --teinte-postes-fixes: #e8f0ed; --trait-postes-fixes: #14532d;
+  --teinte-imprimantes: #f6e8d9;  --trait-imprimantes: #9a3412;
+  --teinte-accessoires: #ecebf6;  --trait-accessoires: #191970;
+
+  --police: "Poppins", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+
+  /* Espacements et formes */
+  --espace-1: 0.5rem;
+  --espace-2: 1rem;
+  --espace-3: 1.5rem;
+  --espace-4: 2.5rem;
+  --espace-5: 4rem;
+  --rayon: 8px;
+  --rayon-pilule: 999px;
+  --largeur-max: 1180px;
+  --hauteur-tactile: 44px;    /* taille minimale des boutons et liens */
+  --hauteur-barre-panier: 64px;
+  --ombre: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+/* ---------- 2. BASE ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+body {
+  margin: 0;
+  font-family: var(--police);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--texte);
+  background: var(--fond);
+  overflow-x: hidden;          /* sécurité : jamais de défilement horizontal */
+}
+
+/* Place pour la barre panier fixe en bas (mobile), seulement quand elle est visible */
+body:has(.barre-panier:not([hidden])) {
+  padding-bottom: var(--hauteur-barre-panier);
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 var(--espace-2);
+}
+h1 { font-size: 1.85rem; }
+h2 { font-size: 1.4rem; }
+h3 { font-size: 1.05rem; }
+
+p {
+  margin: 0 0 var(--espace-2);
+}
+
+a {
+  color: var(--bleu-fonce);
+}
+
+/* L'attribut hidden doit toujours l'emporter sur display: flex / grid */
+[hidden] {
+  display: none !important;
+}
+
+/* Focus visible : indispensable pour la navigation au clavier */
+:focus-visible {
+  outline: 3px solid var(--orange-fonce);
+  outline-offset: 2px;
+}
+
+/* Lien "aller au contenu" pour le clavier et les lecteurs d'écran */
+.lien-evitement {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 200;
+  padding: var(--espace-1) var(--espace-2);
+  background: var(--orange);
+  color: var(--texte);
+}
+.lien-evitement:focus {
+  left: 0;
+}
+
+/* Texte lu par les lecteurs d'écran mais invisible à l'écran */
+.visuellement-cache {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.conteneur {
+  width: 100%;
+  max-width: var(--largeur-max);
+  margin: 0 auto;
+  padding: 0 var(--espace-2);
+}
+
+.section {
+  padding: var(--espace-4) 0;
+}
+.section-douce {
+  background: var(--fond-doux);
+}
+
+/* Petit titre en majuscules au-dessus des titres (même style que mon portfolio) */
+.surtitre {
+  margin: 0 0 var(--espace-1);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--orange-texte);
+}
+
+.entete-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--espace-1) var(--espace-3);
+  margin-bottom: var(--espace-3);
+}
+.entete-section h2 {
+  margin: 0;
+}
+.entete-section p {
+  margin: 0;
+}
+
+/* ---------- 3. BOUTONS ---------- */
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espace-1);
+  min-height: 48px;
+  padding: 0 var(--espace-3);
+  font: inherit;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid var(--bleu-fonce);
+  border-radius: var(--rayon-pilule);
+  background: var(--bleu-fonce);
+  color: var(--orange);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
+}
+.bouton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(25, 25, 112, 0.3);
+}
+
+.bouton-secondaire {
+  background: var(--fond);
+  color: var(--texte);
+  border-color: var(--texte);
+}
+.bouton-secondaire:hover {
+  background: var(--texte);
+  color: var(--fond);
+  box-shadow: none;
+}
+
+.bouton-petit {
+  min-height: var(--hauteur-tactile);
+  padding: 0 var(--espace-2);
+  font-size: 0.9rem;
+}
+
+.bouton-large {
+  width: 100%;
+}
+
+.bouton.est-ajoute {
+  background: var(--succes);
+  border-color: var(--succes);
+  color: #fff;
+}
+
+.bouton-whatsapp {
+  background: var(--whatsapp);
+  border-color: var(--whatsapp);
+  color: #fff;
+}
+
+/* Bouton qui ressemble à un lien (action secondaire : Supprimer, Vider) */
+.bouton-lien,
+.bouton-lien-neutre {
+  min-height: var(--hauteur-tactile);
+  padding: 0 var(--espace-1);
+  font: inherit;
+  font-size: 0.9rem;
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.bouton-lien { color: var(--erreur); }
+.bouton-lien-neutre { color: var(--bleu-fonce); }
+
+.groupe-boutons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espace-2);
+}
+
+/* ---------- 4. EN-TÊTE : barre en forme de pilule ---------- */
+.entete {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 12px var(--espace-2) 0;
+  background: var(--fond);
+}
+
+.entete-barre {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--espace-2);
+  max-width: var(--largeur-max);
+  min-height: 60px;
+  margin: 0 auto;
+  padding: 0 8px 0 var(--espace-3);
+  background: var(--bleu-fonce);
+  border-radius: 40px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  min-height: var(--hauteur-tactile);
+  align-self: center;
+  padding-top: 6px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.logo-pp {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--orange);
+  line-height: 1;
+}
+.logo-nom {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--creme);
+}
+
+/* Trait vertical entre le logo et le menu (ordinateur uniquement) */
+.separateur {
+  display: none;
+  width: 3px;
+  height: 36px;
+  background: var(--creme);
+  border-radius: 2px;
+  opacity: 0.8;
+}
+
+/* Menu : caché par défaut sur mobile, affiché quand .ouvert est ajouté en JS */
+.menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  padding: var(--espace-1);
+  background: var(--bleu-fonce);
+  border-radius: 24px;
+  box-shadow: var(--ombre);
+}
+.menu.ouvert {
+  display: block;
+}
+
+.menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--hauteur-tactile);
+  padding: 0 var(--espace-3);
+  border-radius: var(--rayon-pilule);
+  color: var(--creme);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.menu a:hover {
+  background: rgba(255, 250, 235, 0.15);
+}
+.menu a[aria-current="page"] {
+  background: var(--fond);
+  color: var(--texte);
+}
+
+/* Groupe à droite : panier + burger */
+.entete-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+/* Bouton panier rond orange, avec badge (nombre d'articles) */
+.lien-panier {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--hauteur-tactile);
+  height: var(--hauteur-tactile);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), #e8a56a);
+  color: var(--bleu-fonce);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s;
+}
+.lien-panier:hover {
+  transform: translateY(-2px);
+}
+.lien-panier svg {
+  width: 22px;
+  height: 22px;
+}
+.lien-panier[aria-current="page"] {
+  outline: 3px solid var(--creme);
+  outline-offset: 2px;
+}
+
+.badge-panier {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border: 2px solid var(--bleu-fonce);
+  border-radius: 11px;
+  background: var(--fond);
+  color: var(--bleu-fonce);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* Bouton burger (mobile uniquement) */
+.bouton-burger {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: var(--hauteur-tactile);
+  height: var(--hauteur-tactile);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.bouton-burger span {
+  display: block;
+  width: 24px;
+  height: 3px;
+  background: var(--creme);
+  border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+/* Le burger se transforme en croix quand le menu est ouvert */
+.bouton-burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.bouton-burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.bouton-burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+/* ---------- 5. BARRE PANIER FIXE (mobile uniquement) ---------- */
+.barre-panier {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espace-1);
+  min-height: var(--hauteur-barre-panier);
+  padding: 8px var(--espace-2);
+  background: var(--bleu-fonce);
+  color: var(--creme);
+  text-decoration: none;
+  box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.18);
+}
+.barre-panier-infos {
+  display: grid;
+  line-height: 1.25;
+}
+.barre-panier-infos small {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+.barre-panier-infos strong {
+  color: var(--orange);
+  font-size: 1.05rem;
+}
+.barre-panier-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hauteur-tactile);
+  padding: 0 var(--espace-2);
+  border-radius: var(--rayon-pilule);
+  background: var(--orange);
+  color: var(--bleu-fonce);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* ---------- 6. PIED DE PAGE ---------- */
+.pied {
+  background: var(--bleu-fonce);
+  color: var(--creme);
+  padding: var(--espace-4) 0 var(--espace-3);
+}
+
+.pied-colonnes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espace-3);
+}
+
+.pied h2 {
+  font-size: 1.1rem;
+  color: var(--orange);
+  margin-bottom: var(--espace-1);
+}
+.pied .pied-logo {
+  font-size: 1.6rem;
+}
+
+.pied p {
+  font-weight: 300;
+}
+
+.pied a {
+  color: var(--creme);
+}
+.pied a:hover {
+  color: var(--orange);
+}
+
+.pied ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.pied li a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hauteur-tactile);
+  font-weight: 300;
+}
+
+.pied-bas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espace-1) var(--espace-3);
+  margin-top: var(--espace-3);
+  padding-top: var(--espace-2);
+  border-top: 1px solid rgba(255, 250, 235, 0.25);
+  font-size: 0.85rem;
+  font-weight: 300;
+}
+.pied-bas p {
+  margin: 0;
+}
+
+/* ==========================================================
+   ACCUEIL
+   ========================================================== */
+.hero {
+  display: grid;
+  gap: var(--espace-3);
+  padding-top: var(--espace-4);
+  padding-bottom: var(--espace-4);
+}
+.hero h1 {
+  font-size: 1.9rem;
+}
+.hero-texte > p:not(.surtitre) {
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--texte-doux);
+  max-width: 560px;
+  margin-bottom: var(--espace-3);
+}
+
+/* Visuel du hero : panneau quadrillé avec des étiquettes de prix */
+.hero-visuel {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 220px;
+  border-radius: 24px;
+  background: var(--teinte-portables);
+  color: var(--trait-portables);
+  overflow: hidden;
+}
+.hero-visuel svg {
+  position: relative;
+  z-index: 1;
+  width: 45%;
+  max-width: 220px;
+  height: auto;
+}
+.etiquette-prix {
+  position: absolute;
+  z-index: 2;
+  padding: 6px 14px;
+  border-radius: var(--rayon-pilule);
+  background: var(--fond);
+  box-shadow: var(--ombre);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--texte);
+}
+.etiquette-prix strong {
+  color: var(--bleu-fonce);
+}
+.etiquette-1 { top: 14%; left: 6%; }
+.etiquette-2 { bottom: 12%; right: 6%; }
+
+/* Motif quadrillé + cadre intérieur, réutilisé sur tous les visuels */
+.motif::before,
+.motif::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.motif::before {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 23px, currentColor 23px 24px),
+    repeating-linear-gradient(90deg, transparent 0 23px, currentColor 23px 24px);
+  opacity: 0.1;
+}
+.motif::after {
+  inset: 16px;
+  border: 1px solid currentColor;
+  border-radius: 12px;
+  opacity: 0.3;
+}
+
+/* Bande des arguments de confiance */
+.atouts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--espace-2);
+}
+.atouts li {
+  display: flex;
+  gap: var(--espace-2);
+  align-items: flex-start;
+}
+.atouts svg {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border-radius: 50%;
+  background: var(--bleu-fonce);
+  color: var(--orange);
+}
+.atouts strong {
+  display: block;
+}
+.atouts span {
+  font-size: 0.9rem;
+  color: var(--texte-doux);
+}
+
+/* Tuiles des catégories */
+.grille-categories {
+  display: grid;
+  gap: var(--espace-2);
+}
+.tuile-categorie {
+  display: flex;
+  align-items: center;
+  gap: var(--espace-2);
+  padding: var(--espace-2);
+  border: 1px solid var(--bordure);
+  border-radius: 16px;
+  background: var(--fond);
+  color: var(--texte);
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.tuile-categorie:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ombre);
+}
+.tuile-visuel {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+}
+.tuile-visuel svg {
+  width: 38px;
+  height: 38px;
+}
+.tuile-texte {
+  display: grid;
+  gap: 2px;
+}
+.tuile-texte span {
+  font-size: 0.85rem;
+  color: var(--texte-doux);
+}
+.tuile-texte .tuile-nombre {
+  margin-top: 4px;
+  font-weight: 600;
+  color: var(--orange-texte);
+}
+
+/* Étapes "Comment commander" */
+.etapes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--espace-2);
+  counter-reset: etape;
+}
+.etapes li {
+  position: relative;
+  padding: var(--espace-3) var(--espace-2) var(--espace-2);
+  border-top: 3px solid var(--orange);
+  background: var(--fond);
+  border-radius: 0 0 var(--rayon) var(--rayon);
+  counter-increment: etape;
+}
+.etapes li::before {
+  content: "0" counter(etape);
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--bleu-fonce);
+}
+.etapes strong {
+  display: block;
+}
+.etapes span {
+  font-size: 0.9rem;
+  color: var(--texte-doux);
+}
+
+/* Bandeau d'appel à l'action */
+.bandeau-cta {
+  display: grid;
+  gap: var(--espace-2);
+  padding: var(--espace-4) var(--espace-3);
+  border-radius: 24px;
+  background: var(--bleu-fonce);
+  color: var(--creme);
+}
+.bandeau-cta h2 {
+  color: var(--fond);
+  margin-bottom: var(--espace-1);
+}
+.bandeau-cta p {
+  margin: 0;
+  font-weight: 300;
+}
+.bandeau-cta .bouton {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: var(--bleu-fonce);
+  justify-self: start;
+}
+
+/* ==========================================================
+   EN-TÊTE DES PAGES INTÉRIEURES
+   ========================================================== */
+.page-intro {
+  padding: var(--espace-4) 0 var(--espace-3);
+}
+.page-intro h1 {
+  margin-bottom: var(--espace-1);
+}
+.page-intro p:not(.surtitre) {
+  max-width: 640px;
+  margin: 0;
+  font-weight: 300;
+  color: var(--texte-doux);
+}
+
+/* Fil d'Ariane : Accueil / Catalogue / ... */
+.fil-ariane ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: var(--espace-2) 0 0;
+  font-size: 0.85rem;
+}
+.fil-ariane li:not(:last-child)::after {
+  content: "/";
+  margin-left: 4px;
+  color: var(--texte-doux);
+}
+.fil-ariane a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hauteur-tactile);
+  color: var(--texte-doux);
+}
+
+/* ==========================================================
+   CATALOGUE : filtres et cartes produit
+   ========================================================== */
+.filtres {
+  display: grid;
+  gap: var(--espace-2);
+  margin-bottom: var(--espace-2);
+  padding: var(--espace-2);
+  border: 1px solid var(--bordure);
+  border-radius: 16px;
+  background: var(--fond-doux);
+}
+
+/* Puces de catégories : passent à la ligne si elles débordent */
+.puces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espace-1);
+}
+
+.puce {
+  min-height: var(--hauteur-tactile);
+  padding: 0 var(--espace-2);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--texte);
+  background: var(--fond);
+  border: 1px solid var(--bordure-forte);
+  border-radius: var(--rayon-pilule);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.puce:hover {
+  border-color: var(--bleu-fonce);
+}
+.puce[aria-pressed="true"] {
+  background: var(--bleu-fonce);
+  border-color: var(--bleu-fonce);
+  color: var(--orange);
+}
+
+.filtres-listes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espace-2);
+}
+
+.champ label,
+.champ legend {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.champ select,
+.champ input[type="text"],
+.champ input[type="tel"],
+.champ input[type="search"],
+.champ textarea {
+  width: 100%;
+  min-height: var(--hauteur-tactile);
+  padding: 10px 14px;
+  font: inherit;
+  color: var(--texte);
+  background: var(--fond);
+  border: 1px solid var(--bordure-forte);
+  border-radius: var(--rayon);
+}
+.champ textarea {
+  resize: vertical;
+}
+.champ [aria-invalid="true"] {
+  border: 2px solid var(--erreur);
+}
+
+.resultats-barre {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espace-2);
+  margin-bottom: var(--espace-2);
+}
+.nb-resultats {
+  margin: 0;
+  font-weight: 600;
+  color: var(--texte-doux);
+}
+
+/* Grille : 1 colonne à 360 px, 2 en tablette, 4 sur ordinateur */
+.grille-produits {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espace-2);
+}
+
+.carte-produit {
+  display: flex;
+  flex-direction: column;
+  background: var(--fond);
+  border: 1px solid var(--bordure);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.carte-produit:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ombre);
+}
+
+/* Visuel de la carte : teinte de la catégorie + motif quadrillé */
+.carte-visuel,
+.fiche-visuel {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+.carte-visuel::before,
+.fiche-visuel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 23px, currentColor 23px 24px),
+    repeating-linear-gradient(90deg, transparent 0 23px, currentColor 23px 24px);
+  opacity: 0.08;
+}
+.carte-visuel svg {
+  position: relative;
+  width: 38%;
+  height: auto;
+}
+.carte-visuel img,
+.fiche-visuel img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Une teinte par catégorie (classe ajoutée par app.js) */
+.teinte-portables    { background: var(--teinte-portables);    color: var(--trait-portables); }
+.teinte-postes-fixes { background: var(--teinte-postes-fixes); color: var(--trait-postes-fixes); }
+.teinte-imprimantes  { background: var(--teinte-imprimantes);  color: var(--trait-imprimantes); }
+.teinte-accessoires  { background: var(--teinte-accessoires);  color: var(--trait-accessoires); }
+
+.carte-corps {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: var(--espace-2);
+}
+.carte-titre {
+  margin-bottom: var(--espace-1);
+  font-size: 1rem;
+  font-weight: 600;
+}
+.carte-titre a {
+  color: var(--texte);
+  text-decoration: none;
+}
+.carte-titre a:hover {
+  text-decoration: underline;
+}
+.carte-prix {
+  margin: auto 0 var(--espace-2);   /* pousse le prix et le bouton en bas de la carte */
+  padding-top: var(--espace-1);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--bleu-fonce);
+}
+
+.message-vide {
+  grid-column: 1 / -1;
+  padding: var(--espace-4) var(--espace-3);
+  text-align: center;
+  background: var(--fond-doux);
+  border: 1px dashed var(--bordure-forte);
+  border-radius: 16px;
+}
+
+/* ==========================================================
+   FICHE PRODUIT
+   ========================================================== */
+.lien-retour {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hauteur-tactile);
+  font-weight: 600;
+}
+
+.fiche {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espace-3);
+  padding-bottom: var(--espace-4);
+}
+
+.fiche-visuel {
+  border-radius: 24px;
+}
+.fiche-visuel svg {
+  position: relative;
+  width: 40%;
+  height: auto;
+}
+
+.fiche-titre {
+  font-size: 1.6rem;
+}
+.fiche-prix {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--bleu-fonce);
+}
+.fiche-description {
+  color: var(--texte-doux);
+}
+
+.liste-garanties {
+  list-style: none;
+  margin: var(--espace-3) 0 0;
+  padding: var(--espace-2) 0 0;
+  border-top: 3px solid var(--orange);
+  display: grid;
+  gap: var(--espace-1);
+  font-size: 0.9rem;
+}
+.liste-garanties li {
+  display: flex;
+  gap: var(--espace-1);
+}
+.liste-garanties li::before {
+  content: "✓";
+  font-weight: 700;
+  color: var(--succes);
+}
+
+/* Sélecteur de quantité : - [ 1 ] + */
+.selecteur-quantite {
+  display: inline-flex;
+  margin-bottom: var(--espace-2);
+}
+.selecteur-quantite button,
+.selecteur-quantite input {
+  height: var(--hauteur-tactile);
+  font: inherit;
+  font-size: 1.1rem;
+  color: var(--texte);
+  background: var(--fond);
+  border: 1px solid var(--bordure-forte);
+}
+.selecteur-quantite button {
+  width: var(--hauteur-tactile);
+  cursor: pointer;
+}
+.selecteur-quantite button:hover:not(:disabled) {
+  background: var(--fond-doux);
+}
+.selecteur-quantite button:first-child { border-radius: var(--rayon-pilule) 0 0 var(--rayon-pilule); }
+.selecteur-quantite button:last-child  { border-radius: 0 var(--rayon-pilule) var(--rayon-pilule) 0; }
+.selecteur-quantite input {
+  width: 60px;
+  text-align: center;
+  border-left: 0;
+  border-right: 0;
+}
+.selecteur-quantite button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.valeur-quantite {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: var(--hauteur-tactile);
+  background: var(--fond);
+  border-top: 1px solid var(--bordure-forte);
+  border-bottom: 1px solid var(--bordure-forte);
+  font-weight: 600;
+}
+
+/* Volet affiché après un ajout : au-dessus de la barre panier sur mobile */
+.volet-ajout {
+  position: fixed;
+  left: var(--espace-1);
+  right: var(--espace-1);
+  bottom: calc(var(--hauteur-barre-panier) + var(--espace-1));
+  z-index: 95;
+  padding: var(--espace-2);
+  background: var(--fond);
+  border: 1px solid var(--bordure);
+  border-top: 4px solid var(--orange);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.2);
+}
+.volet-entete {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espace-1);
+}
+.volet-entete p {
+  margin: 0 0 var(--espace-2);
+  font-weight: 600;
+}
+.volet-fermer {
+  flex: none;
+  width: var(--hauteur-tactile);
+  height: var(--hauteur-tactile);
+  margin: -10px -10px 0 0;
+  font-size: 1.4rem;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.volet-boutons {
+  display: grid;
+  gap: var(--espace-1);
+}
+.volet-boutons .bouton {
+  min-height: var(--hauteur-tactile);
+  font-size: 0.9rem;
+}
+
+/* ==========================================================
+   PAGE PANIER : lignes, récapitulatif et commande
+   ========================================================== */
+.mise-en-page-panier {
+  display: grid;
+  gap: var(--espace-3);
+  padding-bottom: var(--espace-4);
+}
+
+.liste-panier {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--espace-2);
+}
+
+/* Mobile : visuel | infos, puis sous-total et Supprimer en dessous */
+.ligne-panier {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: var(--espace-1) var(--espace-2);
+  padding: var(--espace-2);
+  background: var(--fond);
+  border: 1px solid var(--bordure);
+  border-radius: 16px;
+}
+.ligne-visuel {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.ligne-visuel svg {
+  width: 32px;
+  height: 32px;
+}
+.ligne-visuel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ligne-titre {
+  margin: 0 0 2px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.ligne-titre a {
+  color: var(--texte);
+}
+.ligne-prix-unitaire {
+  margin: 0 0 var(--espace-1);
+  font-size: 0.85rem;
+  color: var(--texte-doux);
+}
+.ligne-infos .selecteur-quantite {
+  margin-bottom: 0;
+}
+.ligne-fin {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--espace-1);
+  border-top: 1px solid var(--bordure);
+}
+.ligne-sous-total {
+  margin: 0;
+  font-weight: 700;
+  color: var(--bleu-fonce);
+}
+
+.panier-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espace-1);
+  margin-top: var(--espace-2);
+}
+
+/* Colonne récapitulatif + formulaire */
+.zone-commande,
+.zone-confirmation {
+  padding: var(--espace-3) var(--espace-2);
+  background: var(--fond-doux);
+  border: 1px solid var(--bordure);
+  border-radius: 16px;
+}
+
+.recap {
+  margin: 0 0 var(--espace-3);
+  padding: 0;
+}
+.recap div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--espace-2);
+  padding: var(--espace-1) 0;
+  border-bottom: 1px solid var(--bordure);
+}
+.recap dt {
+  color: var(--texte-doux);
+}
+.recap dd {
+  margin: 0;
+  font-weight: 600;
+  text-align: right;
+}
+.recap .recap-ligne-total {
+  padding-top: var(--espace-2);
+  border-top: 3px solid var(--orange);
+  border-bottom: 0;
+}
+.recap .recap-ligne-total dt {
+  color: var(--texte);
+  font-weight: 700;
+}
+.recap .recap-ligne-total dd {
+  font-size: 1.4rem;
+  color: var(--bleu-fonce);
+}
+
+.formulaire {
+  display: grid;
+  gap: var(--espace-2);
+}
+.formulaire h2 {
+  margin-bottom: 0;
+  font-size: 1.2rem;
+}
+
+fieldset.champ {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+/* Choix radio : toute la ligne est cliquable, 44 px minimum */
+.choix {
+  display: flex;
+  align-items: center;
+  gap: var(--espace-1);
+  min-height: var(--hauteur-tactile);
+  cursor: pointer;
+}
+.choix input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  accent-color: var(--bleu-fonce);
+}
+
+.erreur-champ {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--erreur);
+}
+
+.note {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--texte-doux);
+}
+
+.apercu-message {
+  margin: 0 0 var(--espace-2);
+  padding: var(--espace-2);
+  font: inherit;
+  font-size: 0.9rem;
+  white-space: pre-wrap;            /* garde les retours à la ligne du message */
+  overflow-wrap: anywhere;          /* pas de défilement horizontal */
+  background: var(--fond);
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+}
+
+.confirmation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espace-2);
+  margin-top: var(--espace-2);
+}
+
+/* ==========================================================
+   PAGE CONTACT
+   ========================================================== */
+.mise-en-page-contact {
+  display: grid;
+  gap: var(--espace-4);
+  padding-bottom: var(--espace-4);
+}
+
+.coordonnees {
+  margin: 0;
+  border-top: 3px solid var(--orange);
+}
+.coordonnees div {
+  padding: var(--espace-2) 0;
+  border-bottom: 1px solid var(--bordure);
+}
+.coordonnees dt {
+  margin-bottom: 2px;
+  font-size: 0.8rem;
+  color: var(--texte-doux);
+}
+.coordonnees dd {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.coordonnees a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hauteur-tactile);
+  color: var(--texte);
+}
+
+/* ==========================================================
+   TABLETTE : 768 px et plus
+   ========================================================== */
+@media (min-width: 768px) {
+  h1 { font-size: 2.4rem; }
+  h2 { font-size: 1.75rem; }
+
+  .conteneur {
+    padding: 0 var(--espace-3);
+  }
+  .section {
+    padding: var(--espace-5) 0;
+  }
+
+  /* En-tête : menu horizontal dans la pilule, plus de burger ni de barre du bas */
+  .entete {
+    padding: 20px var(--espace-3) 0;
+  }
+  .entete-barre {
+    min-height: 72px;
+    padding: 0 14px 0 var(--espace-4);
+  }
+  .logo-pp { font-size: 2rem; }
+  .logo-nom { font-size: 1.1rem; }
+  .separateur { display: block; }
+
+  .menu {
+    display: block;
+    position: static;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .menu ul {
+    display: flex;
+    gap: 4px;
+  }
+  .menu a {
+    padding: 0 var(--espace-2);
+  }
+
+  .bouton-burger,
+  .barre-panier {
+    display: none !important;
+  }
+  body:has(.barre-panier:not([hidden])) {
+    padding-bottom: 0;
+  }
+
+  .pied-colonnes {
+    grid-template-columns: 1.4fr 1fr 1fr;
+  }
+
+  /* Accueil */
+  .hero h1 { font-size: 2.6rem; }
+  .atouts { grid-template-columns: repeat(2, 1fr); }
+  .grille-categories { grid-template-columns: repeat(2, 1fr); }
+  .etapes { grid-template-columns: repeat(2, 1fr); }
+  .bandeau-cta {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: var(--espace-4);
+  }
+  .bandeau-cta .bouton { justify-self: end; }
+
+  /* Catalogue */
+  .filtres-listes {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+  .grille-produits {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--espace-3);
+  }
+
+  /* Fiche produit */
+  .fiche {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: var(--espace-4);
+  }
+  .bouton-large {
+    width: auto;
+  }
+
+  /* Volet d'ajout : en bas à droite */
+  .volet-ajout {
+    left: auto;
+    right: var(--espace-3);
+    bottom: var(--espace-3);
+    width: 420px;
+  }
+  .volet-boutons {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Panier : ligne complète sur une seule rangée */
+  .ligne-panier {
+    grid-template-columns: 80px 1fr auto;
+    align-items: center;
+  }
+  .ligne-visuel {
+    width: 80px;
+    height: 80px;
+  }
+  .ligne-fin {
+    grid-column: auto;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-top: 0;
+    border-top: 0;
+  }
+  .zone-commande,
+  .zone-confirmation {
+    padding: var(--espace-3);
+  }
+
+  .mise-en-page-contact {
+    grid-template-columns: 0.8fr 1.2fr;
+  }
+}
+
+/* ==========================================================
+   ORDINATEUR : 1280 px et plus
+   ========================================================== */
+@media (min-width: 1280px) {
+  .hero {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: var(--espace-5);
+    padding-top: var(--espace-5);
+    padding-bottom: var(--espace-5);
+  }
+  .hero h1 { font-size: 3.2rem; }
+  .hero-visuel { min-height: 380px; }
+
+  .menu a { padding: 0 var(--espace-3); font-size: 1.05rem; }
+
+  .atouts { grid-template-columns: repeat(4, 1fr); }
+  .grille-categories { grid-template-columns: repeat(4, 1fr); }
+  .tuile-categorie {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--espace-3);
+  }
+  .etapes { grid-template-columns: repeat(4, 1fr); }
+
+  .filtres {
+    grid-template-columns: 1fr;
+  }
+  .grille-produits {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Panier : liste à gauche, récapitulatif et formulaire collants à droite */
+  .mise-en-page-panier {
+    grid-template-columns: 1fr 400px;
+    align-items: start;
+  }
+  .zone-commande {
+    position: sticky;
+    top: 110px;
+  }
+  .zone-confirmation {
+    grid-column: 1 / -1;
+    max-width: 720px;
+  }
+}
+
+/* ---------- ACCESSIBILITÉ : mouvement réduit ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}
+
+/* ==========================================================
+   PHOTOS DES PRODUITS (Unsplash) et crédit du photographe
+   ========================================================== */
+/* La photo couvre toute la zone ; le fond teinté reste visible pendant le chargement */
+.carte-visuel img,
+.fiche-visuel img {
+  transition: transform 0.4s;
+}
+.carte-produit:hover .carte-visuel img {
+  transform: scale(1.04);
+}
+
+.credit-photo {
+  margin: var(--espace-1) 0 0;
+  font-size: 0.75rem;
+  color: var(--texte-doux);
+}
+.credit-photo a {
+  color: inherit;
+}

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PP Informatique - Matériel informatique à Cotonou</title>
+  <meta name="description" content="PP Informatique : ordinateurs, écrans, imprimantes, antivirus et accessoires à Cotonou. Prix en FCFA, paiement à la réception.">
+  <meta name="theme-color" content="#191970">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191970'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='28' text-anchor='middle' fill='%23fdba74'%3EPP%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+  <!-- EN-TÊTE (identique sur toutes les pages) -->
+  <header class="entete">
+    <div class="entete-barre">
+      <a class="logo" href="index.html" aria-label="PP Informatique, retour à l'accueil">
+        <span class="logo-pp">PP</span><span class="logo-nom">Informatique</span>
+      </a>
+      <span class="separateur" aria-hidden="true"></span>
+
+      <nav class="menu" id="menu" aria-label="Navigation principale">
+        <ul>
+          <li><a href="index.html" aria-current="page">Accueil</a></li>
+          <li><a href="catalogue.html">Catalogue</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="entete-actions">
+        <a class="lien-panier" id="lien-panier" href="panier.html" aria-label="Voir mon panier">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.4 12.2a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 7H6"/></svg>
+          <span class="badge-panier" id="badge-panier" hidden>0</span>
+        </a>
+        <button class="bouton-burger" id="bouton-burger" type="button"
+                aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenu">
+    <!-- HERO -->
+    <section class="conteneur hero" aria-labelledby="titre-hero">
+      <div class="hero-texte">
+        <p class="surtitre">Matériel informatique · Cotonou</p>
+        <h1 id="titre-hero">Votre matériel informatique, au prix affiché.</h1>
+        <p>Portables, unités centrales, écrans, imprimantes, antivirus et accessoires. Choisissez en ligne, commandez en un message WhatsApp et payez seulement à la réception.</p>
+        <div class="groupe-boutons">
+          <a class="bouton" href="catalogue.html">Voir le catalogue</a>
+          <a class="bouton bouton-secondaire" href="#comment-commander">Comment commander ?</a>
+        </div>
+      </div>
+      <div class="hero-visuel motif" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/><path d="M10 8.5h4"/></svg>
+        <span class="etiquette-prix etiquette-1">Portables dès <strong>215 000 FCFA</strong></span>
+        <span class="etiquette-prix etiquette-2">Souris dès <strong>4 500 FCFA</strong></span>
+      </div>
+    </section>
+
+    <!-- ARGUMENTS DE CONFIANCE : répondent à la crainte d'acheter en ligne -->
+    <section class="section section-douce" aria-label="Nos engagements">
+      <div class="conteneur">
+        <ul class="atouts">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <div><strong>Prix clairs en FCFA</strong><span>Le prix affiché est le prix payé, sans surprise.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20M6 15h4"/></svg>
+            <div><strong>Paiement à la réception</strong><span>Mobile Money (MTN, Moov) ou espèces, après vérification.</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg>
+            <div><strong>Retrait ou livraison</strong><span>En boutique ou livré à Cotonou (frais confirmés avant).</span></div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.6A8.4 8.4 0 1 1 21 11.5z"/></svg>
+            <div><strong>Conseil sur WhatsApp</strong><span>Une question ? Un conseiller vous répond.</span></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CATÉGORIES : tuiles remplies par app.js -->
+    <section class="section" aria-labelledby="titre-categories">
+      <div class="conteneur">
+        <div class="entete-section">
+          <div>
+            <p class="surtitre">Nos rayons</p>
+            <h2 id="titre-categories">Que cherchez-vous ?</h2>
+          </div>
+        </div>
+        <div class="grille-categories" id="grille-categories"></div>
+      </div>
+    </section>
+
+    <!-- PRODUITS PHARES : remplis par app.js -->
+    <section class="section section-douce" aria-labelledby="titre-phares">
+      <div class="conteneur">
+        <div class="entete-section">
+          <div>
+            <p class="surtitre">Sélection</p>
+            <h2 id="titre-phares">Les plus demandés</h2>
+          </div>
+          <a class="lien-retour" href="catalogue.html">Tout le catalogue →</a>
+        </div>
+        <div class="grille-produits" id="produits-phares"></div>
+      </div>
+    </section>
+
+    <!-- PARCOURS D'ACHAT -->
+    <section class="section" id="comment-commander" aria-labelledby="titre-etapes">
+      <div class="conteneur">
+        <div class="entete-section">
+          <div>
+            <p class="surtitre">Simple et sans risque</p>
+            <h2 id="titre-etapes">Comment commander ?</h2>
+          </div>
+        </div>
+        <ol class="etapes">
+          <li><strong>Choisissez</strong><span>Parcourez le catalogue et filtrez par catégorie ou par prix.</span></li>
+          <li><strong>Ajoutez au panier</strong><span>Ajustez les quantités : le total en FCFA se calcule tout seul.</span></li>
+          <li><strong>Envoyez la commande</strong><span>Indiquez vos coordonnées : la commande part en un message WhatsApp.</span></li>
+          <li><strong>Payez à la réception</strong><span>En boutique ou à la livraison, par Mobile Money ou en espèces.</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section section-douce">
+      <div class="conteneur">
+        <div class="bandeau-cta">
+          <div>
+            <h2>Besoin d'un conseil avant d'acheter ?</h2>
+            <p>Dites-nous votre usage et votre budget, nous vous orientons vers le bon matériel.</p>
+          </div>
+          <a class="bouton" href="contact.html">Nous contacter</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- VOLET affiché après un ajout au panier -->
+  <div class="volet-ajout" id="volet-ajout" role="status" hidden>
+    <div class="volet-entete">
+      <p id="volet-message"></p>
+      <button class="volet-fermer" id="volet-fermer" type="button" aria-label="Fermer">&times;</button>
+    </div>
+    <div class="volet-boutons">
+      <a class="bouton bouton-secondaire" href="catalogue.html">Continuer mes achats</a>
+      <a class="bouton" href="panier.html">Voir mon panier</a>
+    </div>
+  </div>
+
+  <!-- BARRE PANIER FIXE (mobile uniquement, visible dès qu'il y a un article) -->
+  <a class="barre-panier" id="barre-panier" href="panier.html" hidden>
+    <span class="barre-panier-infos">
+      <small id="barre-nb-articles">0 article</small>
+      <strong id="barre-total">0 FCFA</strong>
+    </span>
+    <span class="barre-panier-action">Voir le panier →</span>
+  </a>
+
+  <!-- PIED DE PAGE (identique sur toutes les pages) -->
+  <footer class="pied">
+    <div class="conteneur">
+      <div class="pied-colonnes">
+        <div>
+          <h2 class="pied-logo">PP Informatique</h2>
+          <p>Ordinateurs, écrans, imprimantes, logiciels et accessoires à Cotonou. Prix affichés en FCFA, paiement à la réception.</p>
+        </div>
+        <div>
+          <h2>Navigation</h2>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+            <li><a href="panier.html">Mon panier</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Nous joindre</h2>
+          <ul>
+            <li><a href="https://wa.me/2290199002393" target="_blank" rel="noopener">WhatsApp : +229 01 99 00 23 93</a></li>
+            <li><a href="mailto:chickpoenou@gmail.com">chickpoenou@gmail.com</a></li>
+            <li><a href="https://www.facebook.com/nettanel-poenou" target="_blank" rel="noopener">Facebook</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pied-bas">
+        <p>&copy; <span class="annee">2026</span> PP Informatique. Photos : <a href="https://unsplash.com/license" target="_blank" rel="noopener">Unsplash</a> (auteurs cités sur chaque fiche produit).</p>
+        <p>Site réalisé par <a href="https://github.com/Chickpoenou" target="_blank" rel="noopener">Chickpoenou</a> · projet MIDEESSI Learn</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Ordre important : les données, puis le panier, puis le code des pages -->
+  <script src="js/produits.js"></script>
+  <script src="js/panier.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

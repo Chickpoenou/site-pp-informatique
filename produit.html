@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Produit - PP Informatique</title>
+  <meta name="description" content="Fiche produit PP Informatique : description, prix en FCFA et ajout au panier.">
+  <meta name="theme-color" content="#191970">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191970'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='28' text-anchor='middle' fill='%23fdba74'%3EPP%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+  <!-- EN-TÊTE (identique sur toutes les pages) -->
+  <header class="entete">
+    <div class="entete-barre">
+      <a class="logo" href="index.html" aria-label="PP Informatique, retour à l'accueil">
+        <span class="logo-pp">PP</span><span class="logo-nom">Informatique</span>
+      </a>
+      <span class="separateur" aria-hidden="true"></span>
+
+      <nav class="menu" id="menu" aria-label="Navigation principale">
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="catalogue.html" aria-current="page">Catalogue</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="entete-actions">
+        <a class="lien-panier" id="lien-panier" href="panier.html" aria-label="Voir mon panier">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.4 12.2a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 7H6"/></svg>
+          <span class="badge-panier" id="badge-panier" hidden>0</span>
+        </a>
+        <button class="bouton-burger" id="bouton-burger" type="button"
+                aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenu">
+    <div class="conteneur">
+      <nav class="fil-ariane" aria-label="Fil d'Ariane">
+        <ol>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="catalogue.html">Catalogue</a></li>
+          <li><a id="fil-categorie" href="catalogue.html">Produit</a></li>
+        </ol>
+      </nav>
+
+      <!-- FICHE PRODUIT : remplie par app.js à partir de l'identifiant dans l'adresse (?id=) -->
+      <div id="fiche-produit"></div>
+
+      <!-- PRODUITS SIMILAIRES : même catégorie -->
+      <section class="section" id="zone-similaires" aria-labelledby="titre-similaires" hidden>
+        <h2 id="titre-similaires">Dans la même catégorie</h2>
+        <div class="grille-produits" id="produits-similaires"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- VOLET affiché après un ajout au panier -->
+  <div class="volet-ajout" id="volet-ajout" role="status" hidden>
+    <div class="volet-entete">
+      <p id="volet-message"></p>
+      <button class="volet-fermer" id="volet-fermer" type="button" aria-label="Fermer">&times;</button>
+    </div>
+    <div class="volet-boutons">
+      <a class="bouton bouton-secondaire" href="catalogue.html">Continuer mes achats</a>
+      <a class="bouton" href="panier.html">Voir mon panier</a>
+    </div>
+  </div>
+
+  <!-- BARRE PANIER FIXE (mobile uniquement, visible dès qu'il y a un article) -->
+  <a class="barre-panier" id="barre-panier" href="panier.html" hidden>
+    <span class="barre-panier-infos">
+      <small id="barre-nb-articles">0 article</small>
+      <strong id="barre-total">0 FCFA</strong>
+    </span>
+    <span class="barre-panier-action">Voir le panier →</span>
+  </a>
+
+  <!-- PIED DE PAGE (identique sur toutes les pages) -->
+  <footer class="pied">
+    <div class="conteneur">
+      <div class="pied-colonnes">
+        <div>
+          <h2 class="pied-logo">PP Informatique</h2>
+          <p>Ordinateurs, écrans, imprimantes, logiciels et accessoires à Cotonou. Prix affichés en FCFA, paiement à la réception.</p>
+        </div>
+        <div>
+          <h2>Navigation</h2>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+            <li><a href="panier.html">Mon panier</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Nous joindre</h2>
+          <ul>
+            <li><a href="https://wa.me/2290199002393" target="_blank" rel="noopener">WhatsApp : +229 01 99 00 23 93</a></li>
+            <li><a href="mailto:chickpoenou@gmail.com">chickpoenou@gmail.com</a></li>
+            <li><a href="https://www.facebook.com/nettanel-poenou" target="_blank" rel="noopener">Facebook</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pied-bas">
+        <p>&copy; <span class="annee">2026</span> PP Informatique. Photos : <a href="https://unsplash.com/license" target="_blank" rel="noopener">Unsplash</a> (auteurs cités sur chaque fiche produit).</p>
+        <p>Site réalisé par <a href="https://github.com/Chickpoenou" target="_blank" rel="noopener">Chickpoenou</a> · projet MIDEESSI Learn</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Ordre important : les données, puis le panier, puis le code des pages -->
+  <script src="js/produits.js"></script>
+  <script src="js/panier.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mon panier - PP Informatique</title>
+  <meta name="description" content="Votre panier PP Informatique : quantités, total en FCFA et commande.">
+  <meta name="theme-color" content="#191970">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191970'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='28' text-anchor='middle' fill='%23fdba74'%3EPP%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+  <!-- EN-TÊTE (identique sur toutes les pages) -->
+  <header class="entete">
+    <div class="entete-barre">
+      <a class="logo" href="index.html" aria-label="PP Informatique, retour à l'accueil">
+        <span class="logo-pp">PP</span><span class="logo-nom">Informatique</span>
+      </a>
+      <span class="separateur" aria-hidden="true"></span>
+
+      <nav class="menu" id="menu" aria-label="Navigation principale">
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="catalogue.html">Catalogue</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="entete-actions">
+        <a class="lien-panier" id="lien-panier" href="panier.html" aria-label="Voir mon panier" aria-current="page">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.4 12.2a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 7H6"/></svg>
+          <span class="badge-panier" id="badge-panier" hidden>0</span>
+        </a>
+        <button class="bouton-burger" id="bouton-burger" type="button"
+                aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenu">
+    <div class="conteneur">
+      <div class="page-intro">
+        <p class="surtitre">Commande</p>
+        <h1>Mon panier</h1>
+        <p>Vérifiez vos articles, puis envoyez votre commande. Vous ne payez qu'à la réception.</p>
+      </div>
+
+      <div class="mise-en-page-panier">
+        <!-- Lignes du panier : remplies par app.js -->
+        <section id="liste-panier" aria-label="Articles du panier"></section>
+
+        <!-- RÉCAPITULATIF + FORMULAIRE : visibles seulement si le panier n'est pas vide -->
+        <aside class="zone-commande" id="zone-commande" aria-labelledby="titre-recap" hidden>
+          <h2 id="titre-recap" class="visuellement-cache">Récapitulatif</h2>
+          <dl class="recap">
+            <div><dt id="recap-nb">Sous-total</dt><dd id="recap-sous-total">0 FCFA</dd></div>
+            <div><dt>Livraison</dt><dd>Gratuite en boutique, sinon à confirmer</dd></div>
+            <div class="recap-ligne-total"><dt>Total</dt><dd id="recap-total" aria-live="polite">0 FCFA</dd></div>
+          </dl>
+
+          <form class="formulaire" id="formulaire-commande" novalidate>
+            <h2>Vos coordonnées</h2>
+
+            <div class="champ">
+              <label for="nom">Nom et prénom</label>
+              <input id="nom" name="nom" type="text" autocomplete="name" required aria-describedby="erreur-nom">
+              <p class="erreur-champ" id="erreur-nom" hidden></p>
+            </div>
+
+            <div class="champ">
+              <label for="telephone">Téléphone (WhatsApp de préférence)</label>
+              <input id="telephone" name="telephone" type="tel" inputmode="tel" autocomplete="tel"
+                     placeholder="01 97 00 00 00" required aria-describedby="erreur-telephone">
+              <p class="erreur-champ" id="erreur-telephone" hidden></p>
+            </div>
+
+            <fieldset class="champ">
+              <legend>Comment récupérer votre commande ?</legend>
+              <label class="choix"><input type="radio" name="mode" value="retrait" checked> Retrait en boutique</label>
+              <label class="choix"><input type="radio" name="mode" value="livraison"> Livraison à Cotonou</label>
+            </fieldset>
+
+            <div class="champ" id="champ-adresse" hidden>
+              <label for="adresse">Adresse de livraison (quartier, repère)</label>
+              <textarea id="adresse" name="adresse" rows="3" autocomplete="street-address" aria-describedby="erreur-adresse"></textarea>
+              <p class="erreur-champ" id="erreur-adresse" hidden></p>
+            </div>
+
+            <fieldset class="champ" aria-describedby="erreur-paiement">
+              <legend>Comment paierez-vous à la réception ?</legend>
+              <label class="choix"><input type="radio" name="paiement" value="Mobile Money (MTN MoMo / Moov Money)"> Mobile Money (MTN / Moov)</label>
+              <label class="choix"><input type="radio" name="paiement" value="Espèces"> Espèces</label>
+              <p class="erreur-champ" id="erreur-paiement" hidden></p>
+            </fieldset>
+
+            <button type="submit" class="bouton bouton-large">Valider ma commande</button>
+            <p class="note">Aucun paiement en ligne : votre commande est envoyée à la boutique par WhatsApp, qui vous recontacte pour confirmer.</p>
+          </form>
+        </aside>
+
+        <!-- CONFIRMATION : remplie par app.js après validation du formulaire -->
+        <section class="zone-confirmation" id="confirmation-commande" aria-live="polite" hidden></section>
+      </div>
+    </div>
+  </main>
+
+  <!-- PIED DE PAGE (identique sur toutes les pages) -->
+  <footer class="pied">
+    <div class="conteneur">
+      <div class="pied-colonnes">
+        <div>
+          <h2 class="pied-logo">PP Informatique</h2>
+          <p>Ordinateurs, écrans, imprimantes, logiciels et accessoires à Cotonou. Prix affichés en FCFA, paiement à la réception.</p>
+        </div>
+        <div>
+          <h2>Navigation</h2>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="catalogue.html">Catalogue</a></li>
+            <li><a href="panier.html">Mon panier</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Nous joindre</h2>
+          <ul>
+            <li><a href="https://wa.me/2290199002393" target="_blank" rel="noopener">WhatsApp : +229 01 99 00 23 93</a></li>
+            <li><a href="mailto:chickpoenou@gmail.com">chickpoenou@gmail.com</a></li>
+            <li><a href="https://www.facebook.com/nettanel-poenou" target="_blank" rel="noopener">Facebook</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="pied-bas">
+        <p>&copy; <span class="annee">2026</span> PP Informatique. Photos : <a href="https://unsplash.com/license" target="_blank" rel="noopener">Unsplash</a> (auteurs cités sur chaque fiche produit).</p>
+        <p>Site réalisé par <a href="https://github.com/Chickpoenou" target="_blank" rel="noopener">Chickpoenou</a> · projet MIDEESSI Learn</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Ordre important : les données, puis le panier, puis le code des pages -->
+  <script src="js/produits.js"></script>
+  <script src="js/panier.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
