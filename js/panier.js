@@ -138,5 +138,8 @@ window.addEventListener("storage", function (evenement) {
     if (typeof afficherPanier === "function" && document.getElementById("liste-panier")) {
       afficherPanier();
     }
+    if (typeof afficherEtapes === "function" && document.getElementById("etapes-commande")) {
+      afficherEtapes(ETAPES_COMMANDE);
+    }
   }
 });

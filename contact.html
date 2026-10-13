@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Contact - PP Informatique</title>
   <meta name="description" content="Contacter PP Informatique à Cotonou : WhatsApp, e-mail et Facebook.">
-  <meta name="theme-color" content="#191970">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191970'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='28' text-anchor='middle' fill='%23fdba74'%3EPP%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#0F4C45">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230F4C45'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='28' text-anchor='middle' fill='%23fdba74'%3EPP%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=11">
+  <link rel="stylesheet" href="css/style.css?v=17">
 </head>
 <body>
   <a class="lien-evitement" href="#contenu">Aller au contenu</a>
@@ -30,6 +30,13 @@
           <li><a href="contact.html" aria-current="page">Contact</a></li>
         </ul>
       </nav>
+
+      <!-- RECHERCHE (idée Fnac : toujours visible) : envoie vers catalogue.html?q=... -->
+      <form class="recherche-entete" action="catalogue.html" method="get" role="search">
+        <label class="visuellement-cache" for="recherche-entete">Rechercher un produit</label>
+        <input id="recherche-entete" name="q" type="search" placeholder="Rechercher un produit" autocomplete="off">
+        <button type="submit" aria-label="Lancer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+      </form>
 
       <div class="entete-actions">
         <a class="lien-panier" id="lien-panier" href="panier.html" aria-label="Voir mon panier">
@@ -167,8 +174,8 @@
   </footer>
 
   <!-- Ordre important : les données, puis le panier, puis le code des pages -->
-  <script src="js/produits.js?v=11"></script>
-  <script src="js/panier.js?v=11"></script>
-  <script src="js/app.js?v=11"></script>
+  <script src="js/produits.js?v=17"></script>
+  <script src="js/panier.js?v=17"></script>
+  <script src="js/app.js?v=17"></script>
 </body>
 </html>

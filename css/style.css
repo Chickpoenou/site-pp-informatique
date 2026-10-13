@@ -6,29 +6,31 @@
 
 /* ---------- 1. VARIABLES (les couleurs se changent ICI seulement) ---------- */
 :root {
-  /* Couleurs inspirées du logo : bleu nuit (confiance) + orange (action) */
-  --bleu-fonce: #191970;
-  --bleu-fonce-2: #12124f;
-  --bleu: #2c3fb8;
+  /* Couleurs : vert sapin (confiance) + pêche (action) */
+  --bleu-fonce: #0F4C45;
+  --bleu-fonce-2: #0A3A35;
   --orange: #fdba74;          /* boutons d'action, badge panier, accents */
   --orange-fonce: #f59e4b;
   --orange-texte: #b45309;    /* textes orange sur fond blanc (contraste suffisant) */
   --creme: #fffaeb;           /* texte des liens du menu */
+  --orange-degrade: #e8a56a;  /* 2e couleur du dégradé du bouton panier */
   --texte: #0f172a;
   --texte-doux: #475569;
   --fond: #ffffff;
-  --fond-doux: #f9f8f4;
+  --fond-doux: #F7F8F4;
   --bordure: #e2e2df;
   --bordure-forte: #cbd5e1;
   --erreur: #b3261e;
+  --erreur-fond: #fdecea;
   --succes: #166534;
-  --whatsapp: #1f8f4e;
+  --succes-fond: #e3f3e8;
+  --whatsapp: #15803D;
 
   /* Teintes des visuels, une par catégorie */
-  --teinte-portables: #e8edf4;    --trait-portables: #1e3a5f;
-  --teinte-postes-fixes: #e8f0ed; --trait-postes-fixes: #14532d;
+  --teinte-portables: #ECEFF1;    --trait-portables: #37474F;
+  --teinte-postes-fixes: #E4EFEC; --trait-postes-fixes: #0F4C45;
   --teinte-imprimantes: #f6e8d9;  --trait-imprimantes: #9a3412;
-  --teinte-accessoires: #ecebf6;  --trait-accessoires: #191970;
+  --teinte-accessoires: #EDE9F4;  --trait-accessoires: #5B3F8C;
 
   --police: "Poppins", "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
 
@@ -213,7 +215,7 @@ a {
 }
 .bouton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(25, 25, 112, 0.3);
+  box-shadow: 0 6px 14px rgba(15, 76, 69, 0.3);
 }
 
 .bouton-secondaire {
@@ -383,7 +385,7 @@ a {
   width: var(--hauteur-tactile);
   height: var(--hauteur-tactile);
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--orange), #e8a56a);
+  background: linear-gradient(135deg, var(--orange), var(--orange-degrade));
   color: var(--bleu-fonce);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
   transition: transform 0.2s;
@@ -700,26 +702,61 @@ a {
   color: var(--orange-texte);
 }
 
-/* Étapes "Comment commander" (générées par app.js) */
+/* Étapes "Comment commander" (générées par app.js) : une bande qui défile de droite à gauche,
+   avec le même comportement sur toutes les tailles d'écran */
+.defilement-etapes {
+  overflow: hidden;
+  /* les bords s'effacent en fondu : les cartes entrent et sortent en douceur */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
 .etapes {
   list-style: none;
   margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr;          /* mobile : une étape sous l'autre */
-  gap: var(--espace-3);
+  padding: var(--espace-1) 0;
+  display: flex;
+  width: max-content;               /* la bande est aussi large que toutes les cartes mises bout à bout */
+  animation: defiler-etapes 28s linear infinite;
 }
+/* La liste contient 2 séries identiques : glisser de 0 à -50 % fait avancer d'une série vers la gauche */
+@keyframes defiler-etapes {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+/* Pause au survol ou au clavier (focus dans la bande) : on peut lire et cliquer */
+.defilement-etapes:hover .etapes,
+.defilement-etapes:focus-within .etapes {
+  animation-play-state: paused;
+}
+
 .etape {
-  padding-top: var(--espace-2);
-  border-top: 2px solid var(--orange-fonce);   /* fine ligne orange au-dessus de chaque étape */
+  flex: 0 0 260px;                  /* même largeur de carte sur tous les écrans */
+  margin-right: var(--espace-2);    /* marge (et non gap) : les 2 séries ont exactement la même largeur */
+  display: flex;
+  flex-direction: column;
+  padding: var(--espace-2);
+  border: 1px solid var(--bordure);
+  border-radius: 16px;
+  background: var(--fond);
+}
+.etape-haut {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--espace-1);
+  margin-bottom: var(--espace-1);
 }
 .etape-numero {
-  display: block;
-  margin-bottom: var(--espace-1);
   font-size: 2rem;
   font-weight: 700;
   line-height: 1;
   color: var(--bleu-fonce);
+}
+.etape-badge {
+  padding: 2px 10px;
+  border-radius: var(--rayon-pilule);
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 .etape-titre {
   margin: 0 0 4px;
@@ -727,9 +764,65 @@ a {
   font-weight: 700;
 }
 .etape-description {
-  margin: 0;
+  margin: 0 0 var(--espace-2);
   font-size: 0.9rem;
   color: var(--texte-doux);
+}
+.etape-action {
+  margin-top: auto;                 /* le lien reste en bas de la carte */
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--hauteur-tactile);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--bleu-fonce);
+  text-decoration: none;
+}
+.etape-action:hover {
+  text-decoration: underline;
+}
+
+/* États calculés depuis le panier du visiteur */
+.etape-faite .etape-numero {
+  color: var(--texte-doux);
+}
+.etape-faite .etape-badge {
+  background: var(--succes-fond);
+  color: var(--succes);
+}
+.etape-en-cours {
+  border-color: var(--bleu-fonce);
+  background: var(--fond-doux);
+}
+.etape-en-cours .etape-badge {
+  background: var(--orange);
+  color: var(--bleu-fonce);
+}
+.etape-en-cours .etape-action {
+  padding: 0 var(--espace-2);
+  border-radius: var(--rayon-pilule);
+  background: var(--bleu-fonce);
+  color: var(--orange);
+}
+.etape-en-cours .etape-action:hover {
+  text-decoration: none;
+}
+
+/* Animations réduites demandées par le visiteur : la bande ne bouge pas,
+   on la fait défiler au doigt ou à la souris, et la copie est masquée */
+@media (prefers-reduced-motion: reduce) {
+  .defilement-etapes {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .etapes {
+    animation: none;
+  }
+  .etape-copie {
+    display: none;
+  }
 }
 
 #titre-etapes {
@@ -1404,11 +1497,11 @@ fieldset.champ {
   background: currentColor;
 }
 .statut-boutique.est-ouvert {
-  background: #e3f3e8;
+  background: var(--succes-fond);
   color: var(--succes);
 }
 .statut-boutique.est-ferme {
-  background: #fdecea;
+  background: var(--erreur-fond);
   color: var(--erreur);
 }
 
@@ -1503,7 +1596,7 @@ fieldset.champ {
   content: "+";
   flex: none;
   font-size: 1.3rem;
-  color: var(--orange-fonce);
+  color: var(--orange-texte);
   transition: transform 0.2s;
 }
 .question[open] summary::after {
@@ -1572,7 +1665,6 @@ fieldset.champ {
   .hero h1 { font-size: 2.6rem; }
   .atouts { grid-template-columns: repeat(2, 1fr); }
   .grille-categories { grid-template-columns: repeat(2, 1fr); }
-  .etapes { grid-template-columns: repeat(2, 1fr); }
   .bandeau-cta {
     grid-template-columns: 1fr auto;
     align-items: center;
@@ -1769,13 +1861,13 @@ fieldset.champ {
 .tuile-rayon-photo svg {
   width: 40%;
 }
-/* Dégradé bleu nuit en bas : le texte blanc reste lisible quelle que soit la photo */
+/* Dégradé vert sapin en bas : le texte blanc reste lisible quelle que soit la photo */
 .tuile-rayon::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(to top, rgba(25, 25, 112, 0.95) 0%, rgba(25, 25, 112, 0.55) 45%, rgba(25, 25, 112, 0) 75%);
+  background: linear-gradient(to top, rgba(15, 76, 69, 0.95) 0%, rgba(15, 76, 69, 0.55) 45%, rgba(15, 76, 69, 0) 75%);
 }
 .tuile-rayon:hover .tuile-rayon-photo img {
   transform: scale(1.06);
@@ -1863,12 +1955,6 @@ fieldset.champ {
   }
 }
 
-/* Étapes "Comment commander" : 4 colonnes dès 1024 px (ordinateurs portables courants) */
-@media (min-width: 1024px) {
-  .etapes {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
 
 /* ==========================================================
    TRÈS PETITS ÉCRANS (moins de 360 px) : l'en-tête doit tenir sans cacher le burger
@@ -1895,4 +1981,150 @@ fieldset.champ {
   .logo-nom {
     display: none;           /* on garde seulement "PP" : le lien reste nommé grâce à aria-label */
   }
+}
+
+/* ==========================================================
+   RECHERCHE DANS L'EN-TÊTE (inspirée de la Fnac : toujours visible)
+   Mobile et tablette : 2e ligne pleine largeur dans la barre.
+   Ordinateur (1024 px et plus) : entre le logo et le menu.
+   ========================================================== */
+.entete-barre {
+  flex-wrap: wrap;                 /* permet à la recherche de passer à la ligne */
+}
+.recherche-entete {
+  position: relative;
+  order: 10;                       /* après le logo et les boutons : 2e ligne */
+  flex-basis: 100%;
+  margin: 0 8px 12px 0;
+}
+.recherche-entete input {
+  width: 100%;
+  height: 42px;
+  padding: 0 48px 0 18px;          /* place à droite pour le bouton loupe */
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--texte);
+  background: var(--fond);
+  border: 0;
+  border-radius: var(--rayon-pilule);
+}
+.recherche-entete button {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--bleu-fonce);
+  cursor: pointer;
+}
+.recherche-entete button svg {
+  width: 18px;
+  height: 18px;
+}
+@media (max-width: 767px) {
+  .entete-barre {
+    border-radius: 28px;           /* la barre est plus haute : coins moins arrondis */
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .entete-barre {
+    border-radius: 32px;
+  }
+  .recherche-entete {
+    margin-left: -16px;            /* aligne la recherche sous le logo */
+  }
+}
+@media (min-width: 1024px) {
+  .recherche-entete {
+    order: 0;                      /* revient sur la même ligne, juste après le logo */
+    flex: 1;
+    flex-basis: auto;
+    max-width: 340px;
+    margin: 0 0 0 var(--espace-2);
+  }
+}
+
+/* ==========================================================
+   BANDEAU DE RÉASSURANCE (catalogue et fiche produit)
+   Mobile : bande qui défile au doigt. Ordinateur : 4 colonnes.
+   ========================================================== */
+.bandeau-confiance {
+  list-style: none;
+  display: flex;
+  gap: var(--espace-1);
+  margin: var(--espace-2) 0 0;
+  padding: 0 0 4px;
+  overflow-x: auto;                /* défile dans sa zone, jamais toute la page */
+  scroll-snap-type: x mandatory;
+}
+.bandeau-confiance li {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--fond-doux);
+  font-size: 0.85rem;
+  color: var(--texte-doux);
+  scroll-snap-align: start;
+}
+.bandeau-confiance strong {
+  display: block;
+  color: var(--texte);
+}
+.bandeau-confiance svg {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  color: var(--bleu-fonce);
+}
+@media (min-width: 1024px) {
+  .bandeau-confiance {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    overflow: visible;
+  }
+}
+
+/* Titres des groupes de filtres du catalogue ("Par rayon", "Par usage") */
+.filtre-titre {
+  margin: 0 0 -8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* ==========================================================
+   FICHE TECHNIQUE (page produit)
+   ========================================================== */
+.zone-caracteristiques {
+  max-width: 720px;
+  padding-bottom: var(--espace-3);
+}
+.zone-caracteristiques h2 {
+  font-size: 1.3rem;
+}
+.caracteristiques {
+  margin: 0;
+  border-top: 2px solid var(--bleu-fonce);
+}
+.caracteristique {
+  display: grid;
+  grid-template-columns: minmax(110px, 40%) 1fr;
+  gap: var(--espace-2);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--bordure);
+  font-size: 0.95rem;
+}
+.caracteristique dt {
+  color: var(--texte-doux);
+}
+.caracteristique dd {
+  margin: 0;
+  font-weight: 600;
 }

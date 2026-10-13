@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Produit - PP Informatique</title>
   <meta name="description" content="Fiche produit PP Informatique : description, prix en FCFA et ajout au panier.">
-  <meta name="theme-color" content="#191970">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23191970'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='28' text-anchor='middle' fill='%23fdba74'%3EPP%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#0F4C45">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230F4C45'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='28' text-anchor='middle' fill='%23fdba74'%3EPP%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=11">
+  <link rel="stylesheet" href="css/style.css?v=17">
 </head>
 <body>
   <a class="lien-evitement" href="#contenu">Aller au contenu</a>
@@ -31,6 +31,13 @@
         </ul>
       </nav>
 
+      <!-- RECHERCHE (idée Fnac : toujours visible) : envoie vers catalogue.html?q=... -->
+      <form class="recherche-entete" action="catalogue.html" method="get" role="search">
+        <label class="visuellement-cache" for="recherche-entete">Rechercher un produit</label>
+        <input id="recherche-entete" name="q" type="search" placeholder="Rechercher un produit" autocomplete="off">
+        <button type="submit" aria-label="Lancer la recherche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
+      </form>
+
       <div class="entete-actions">
         <a class="lien-panier" id="lien-panier" href="panier.html" aria-label="Voir mon panier">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.4 12.2a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.6L21 7H6"/></svg>
@@ -46,6 +53,13 @@
 
   <main id="contenu">
     <div class="conteneur">
+    <!-- BANDEAU DE RÉASSURANCE (idée Fnac / Bonsplansmania : rassurer avant l'achat) -->
+    <ul class="bandeau-confiance" aria-label="Nos engagements">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/></svg><span><strong>Retrait gratuit</strong> en boutique</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M2 10h20M6 15h4"/></svg><span><strong>Paiement à la réception</strong> MoMo ou espèces</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg><span><strong>Livraison à Cotonou</strong> frais annoncés avant</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.6A8.4 8.4 0 1 1 21 11.5z"/></svg><span><strong>Conseil sur WhatsApp</strong> avant d'acheter</span></li>
+    </ul>
       <nav class="fil-ariane" aria-label="Fil d'Ariane">
         <ol>
           <li><a href="index.html">Accueil</a></li>
@@ -56,6 +70,12 @@
 
       <!-- FICHE PRODUIT : remplie par app.js à partir de l'identifiant dans l'adresse (?id=) -->
       <div id="fiche-produit"></div>
+
+      <!-- FICHE TECHNIQUE (conseil Bonsplansmania : caractéristiques détaillées) : remplie par app.js -->
+      <section class="zone-caracteristiques" id="zone-caracteristiques" aria-labelledby="titre-caracteristiques" hidden>
+        <h2 id="titre-caracteristiques">Fiche technique</h2>
+        <dl class="caracteristiques" id="caracteristiques"></dl>
+      </section>
 
       <!-- PRODUITS SIMILAIRES : même catégorie -->
       <section class="section" id="zone-similaires" aria-labelledby="titre-similaires" hidden>
@@ -120,8 +140,8 @@
   </footer>
 
   <!-- Ordre important : les données, puis le panier, puis le code des pages -->
-  <script src="js/produits.js?v=11"></script>
-  <script src="js/panier.js?v=11"></script>
-  <script src="js/app.js?v=11"></script>
+  <script src="js/produits.js?v=17"></script>
+  <script src="js/panier.js?v=17"></script>
+  <script src="js/app.js?v=17"></script>
 </body>
 </html>

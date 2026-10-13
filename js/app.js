@@ -158,6 +158,9 @@ function ajouterEtPrevenir(produit, quantite, bouton) {
   const quantiteAvant = quantiteDansPanier(produit.id);
   const quantiteApres = ajouterAuPanier(produit.id, quantite);
 
+  // Sur l'accueil, la section "Comment commander ?" avance d'une étape
+  if (document.getElementById("etapes-commande")) afficherEtapes(ETAPES_COMMANDE);
+
   if (quantiteApres === quantiteAvant + quantite) {
     afficherVoletAjout(quantite + " × " + produit.nom + " ajouté à votre panier.");
   } else {
@@ -224,21 +227,62 @@ if (document.getElementById("produits-phares")) {
 // ---------- 6 bis. Accueil : étapes "Comment commander ?" ----------
 // Le HTML des étapes est construit à partir du tableau ETAPES_COMMANDE (produits.js).
 // Pour changer un texte, on modifie le tableau, pas le HTML.
+// La section suit le panier du visiteur : les étapes déjà faites sont cochées
+// et l'étape où il en est est mise en avant.
 
-function creerEtape(etape) {
-  const element = creerElement("li", "etape");
+// Index (0, 1, 2...) de l'étape où se trouve le visiteur :
+// panier vide -> étape 01 "Choisissez" ; panier rempli -> étape 03 "Envoyez la commande"
+function etapeEnCours() {
+  return panier.length === 0 ? 0 : 2;
+}
+
+// Construit une étape. etat vaut "faite", "en-cours" ou "a-venir".
+function creerEtape(etape, index, etat) {
+  const element = creerElement("li", "etape etape-" + etat);
+  element.style.setProperty("--rang", index);   // sert au décalage de l'animation (CSS)
+
+  const haut = creerElement("div", "etape-haut");
+  haut.appendChild(creerElement("span", "etape-numero", etape.numero));
+  if (etat === "faite") haut.appendChild(creerElement("span", "etape-badge", "✓ Fait"));
+  if (etat === "en-cours") haut.appendChild(creerElement("span", "etape-badge", "Vous êtes ici"));
+
+  const lien = creerElement("a", "etape-action", etape.action + " →");
+  lien.href = etape.lien;
+
   element.append(
-    creerElement("span", "etape-numero", etape.numero),
+    haut,
     creerElement("h3", "etape-titre", etape.titre),
-    creerElement("p", "etape-description", etape.description)
+    creerElement("p", "etape-description", etape.description),
+    lien
   );
+  if (etat === "en-cours") element.setAttribute("aria-current", "step");
   return element;
 }
 
 function afficherEtapes(etapes) {
   const liste = document.getElementById("etapes-commande");
+  const courante = etapeEnCours();
   liste.replaceChildren();
-  etapes.forEach(function (etape) { liste.appendChild(creerEtape(etape)); });
+  etapes.forEach(function (etape, index) {
+    const etat = index < courante ? "faite" : (index === courante ? "en-cours" : "a-venir");
+    liste.appendChild(creerEtape(etape, index, etat));
+  });
+  dupliquerEtapesPourBoucle();
+}
+
+// Défilement en boucle : on ajoute une COPIE des étapes à la suite des vraies.
+// La bande glisse vers la gauche d'exactement la largeur d'une série, puis recommence :
+// comme la copie est identique, le raccord ne se voit pas (voir @keyframes defiler-etapes).
+function dupliquerEtapesPourBoucle() {
+  const liste = document.getElementById("etapes-commande");
+  Array.from(liste.children).forEach(function (etape) {
+    const copie = etape.cloneNode(true);
+    copie.setAttribute("aria-hidden", "true");      // les lecteurs d'écran ne lisent pas la copie
+    copie.removeAttribute("aria-current");
+    copie.querySelectorAll("a").forEach(function (lien) { lien.tabIndex = -1; });   // ni la touche Tab
+    copie.classList.add("etape-copie");
+    liste.appendChild(copie);
+  });
 }
 
 if (document.getElementById("etapes-commande")) {
@@ -250,6 +294,7 @@ if (document.getElementById("etapes-commande")) {
 // L'état des filtres : une seule variable qui décrit ce que le visiteur a choisi
 const etatFiltres = {
   categorie: "toutes",
+  usage: "tous",
   prix: "tous",
   tri: "aucun",
   recherche: ""
@@ -265,12 +310,15 @@ function filtrerProduits() {
   const fourchette = FOURCHETTES_PRIX.find(function (f) { return f.id === etatFiltres.prix; });
   const recherche = normaliser(etatFiltres.recherche.trim());
 
-  // filter garde uniquement les produits qui respectent les trois filtres
+  // filter garde uniquement les produits qui respectent les quatre filtres
   const resultat = PRODUITS.filter(function (p) {
     const bonneCategorie = etatFiltres.categorie === "toutes" || p.categorie === etatFiltres.categorie;
+    const bonUsage = etatFiltres.usage === "tous" || p.usages.includes(etatFiltres.usage);
     const bonPrix = p.prix >= fourchette.min && p.prix <= fourchette.max;
-    const bonTexte = recherche === "" || normaliser(p.nom + " " + p.description).includes(recherche);
-    return bonneCategorie && bonPrix && bonTexte;
+    // La recherche porte aussi sur la fiche technique : "SSD" ou "HDMI" trouvent les bons produits
+    const fiche = p.caracteristiques.map(function (c) { return c.join(" "); }).join(" ");
+    const bonTexte = recherche === "" || normaliser(p.nom + " " + p.description + " " + fiche).includes(recherche);
+    return bonneCategorie && bonUsage && bonPrix && bonTexte;
   });
 
   if (etatFiltres.tri === "croissant") {
@@ -291,7 +339,7 @@ function afficherCatalogue() {
 
   if (produits.length === 0) {
     grille.appendChild(creerElement("p", "message-vide",
-      "Aucun produit ne correspond à ces filtres. Essayez une autre catégorie ou un autre prix."));
+      "Aucun produit ne correspond à ces filtres. Essayez un autre rayon, un autre usage ou un autre prix."));
   } else {
     produits.forEach(function (p) { grille.appendChild(creerCarteProduit(p)); });
   }
@@ -299,10 +347,13 @@ function afficherCatalogue() {
   compteur.textContent = produits.length + (produits.length > 1 ? " produits" : " produit");
 }
 
-// Met à jour les puces : une seule est "appuyée" à la fois
+// Met à jour les puces : une seule est "appuyée" à la fois dans chaque groupe
 function marquerPuceActive() {
   document.querySelectorAll("#puces-categories .puce").forEach(function (b) {
     b.setAttribute("aria-pressed", String(b.dataset.categorie === etatFiltres.categorie));
+  });
+  document.querySelectorAll("#puces-usages .puce").forEach(function (b) {
+    b.setAttribute("aria-pressed", String(b.dataset.usage === etatFiltres.usage));
   });
 }
 
@@ -313,9 +364,16 @@ function initialiserCatalogue() {
   const champRecherche = document.getElementById("recherche");
 
   // Catégorie passée dans l'adresse depuis l'accueil : catalogue.html?categorie=portables
-  const categorieAdresse = new URLSearchParams(window.location.search).get("categorie");
+  const parametres = new URLSearchParams(window.location.search);
+  const categorieAdresse = parametres.get("categorie");
   if (trouverCategorie(categorieAdresse)) {
     etatFiltres.categorie = categorieAdresse;
+  }
+  // Recherche envoyée depuis l'en-tête de n'importe quelle page : catalogue.html?q=imprimante
+  if (parametres.get("q")) {
+    etatFiltres.recherche = parametres.get("q");
+    champRecherche.value = etatFiltres.recherche;
+    document.getElementById("recherche-entete").value = etatFiltres.recherche;
   }
 
   // Puces : "Toutes" + une puce par catégorie
@@ -324,6 +382,21 @@ function initialiserCatalogue() {
     bouton.type = "button";
     bouton.dataset.categorie = cat.id;
     conteneurPuces.appendChild(bouton);
+  });
+  // Puces "Par usage" : "Tous usages" + une puce par usage (tableau USAGES de produits.js)
+  const conteneurUsages = document.getElementById("puces-usages");
+  [{ id: "tous", nom: "Tous usages" }].concat(USAGES).forEach(function (usage) {
+    const bouton = creerElement("button", "puce", usage.nom);
+    bouton.type = "button";
+    bouton.dataset.usage = usage.id;
+    conteneurUsages.appendChild(bouton);
+  });
+  conteneurUsages.addEventListener("click", function (evenement) {
+    const bouton = evenement.target.closest(".puce");
+    if (!bouton) return;
+    etatFiltres.usage = bouton.dataset.usage;
+    marquerPuceActive();
+    afficherCatalogue();
   });
   marquerPuceActive();
 
@@ -360,6 +433,7 @@ function initialiserCatalogue() {
   // Bouton "Réinitialiser" : on remet l'état et les champs à zéro
   document.getElementById("reinitialiser-filtres").addEventListener("click", function () {
     etatFiltres.categorie = "toutes";
+    etatFiltres.usage = "tous";
     etatFiltres.prix = "tous";
     etatFiltres.tri = "aucun";
     etatFiltres.recherche = "";
@@ -455,6 +529,17 @@ function afficherFicheProduit(produit) {
     garanties
   );
   zone.append(creerVisuel("div", "fiche-visuel", produit), infos);
+
+  // Fiche technique : une ligne "nom : valeur" par caractéristique
+  const listeCaracteristiques = document.getElementById("caracteristiques");
+  if (listeCaracteristiques && produit.caracteristiques.length > 0) {
+    produit.caracteristiques.forEach(function (c) {
+      const ligne = creerElement("div", "caracteristique");
+      ligne.append(creerElement("dt", "", c[0]), creerElement("dd", "", c[1]));
+      listeCaracteristiques.appendChild(ligne);
+    });
+    document.getElementById("zone-caracteristiques").hidden = false;
+  }
 
   // Produits similaires : même catégorie, sans le produit affiché (3 au maximum)
   const similaires = PRODUITS.filter(function (p) {
