@@ -20,6 +20,10 @@ Site statique HTML / CSS / JavaScript, sans framework ni serveur.
 - Affichage à 360, 768 et 1280 px sans défilement horizontal.
 - Panier : ajout, modification de la quantité, suppression, total en FCFA, conservation après rechargement.
 
+## Maquette (Tâche 1)
+- Lien Canva : https://canva.link/d6n1z1t87uyznzn
+- Export PDF : `maquette/Maquette_PP_Informatique.pdf` (4 écrans en mobile 360 px et ordinateur 1440 px)
+
 ## Mise en ligne (gratuite)
 - **Netlify** : glisser-déposer le dossier `site-pp-informatique` sur https://app.netlify.com/drop
 - **GitHub Pages** : pousser le dossier dans un dépôt, puis Settings > Pages > branche `main`, dossier `/ (root)`.

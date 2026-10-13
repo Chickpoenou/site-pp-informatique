@@ -2128,3 +2128,26 @@ fieldset.champ {
   margin: 0;
   font-weight: 600;
 }
+
+/* Mobile et tablette : chaque groupe de puces tient sur une ligne qui défile au doigt
+   (comme l'appli Fnac) : les produits remontent au lieu d'être poussés sous les filtres. */
+@media (max-width: 1023px) {
+  .puces {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+  .puce {
+    flex: none;
+    white-space: nowrap;
+  }
+}
+/* Barres de défilement masquées : la carte coupée au bord montre qu'on peut faire glisser */
+.puces,
+.bandeau-confiance {
+  scrollbar-width: none;
+}
+.puces::-webkit-scrollbar,
+.bandeau-confiance::-webkit-scrollbar {
+  display: none;
+}
